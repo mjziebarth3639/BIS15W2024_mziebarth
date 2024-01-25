@@ -56,8 +56,14 @@ summary(homerange)
 
 **3. Change the class of the variables `taxon` and `order` to factors and display their levels.**  
 ```{r}
-select(homerange, "taxon", "order")
+class_t <- as.factor(homerange$taxon)
+levels(class_t)
 ```
+```{r}
+class_o <- as.factor(homerange$order)
+levels(class_o)
+```
+
 
 **4. What taxa are represented in the `homerange` data frame? Make a new data frame `taxa` that is restricted to taxon, common name, class, order, family, genus, species.**  
 ```{r}

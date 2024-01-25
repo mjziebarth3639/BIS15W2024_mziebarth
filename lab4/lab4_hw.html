@@ -11,7 +11,7 @@
 
 <meta name="author" content="Please Add Your Name Here" />
 
-<meta name="date" content="2024-01-24" />
+<meta name="date" content="2024-01-25" />
 
 <title>Lab 4 Homework</title>
 
@@ -376,7 +376,7 @@ display: none;
 
 <h1 class="title toc-ignore">Lab 4 Homework</h1>
 <h4 class="author">Please Add Your Name Here</h4>
-<h4 class="date">2024-01-24</h4>
+<h4 class="date">2024-01-25</h4>
 
 </div>
 
@@ -494,21 +494,30 @@ separate code chunks.</strong></p>
 ##  NA&#39;s   :502</code></pre>
 <p><strong>3. Change the class of the variables <code>taxon</code> and
 <code>order</code> to factors and display their levels.</strong></p>
-<pre class="r"><code>select(homerange, &quot;taxon&quot;, &quot;order&quot;)</code></pre>
-<pre><code>## # A tibble: 569 × 2
-##    taxon         order         
-##    &lt;chr&gt;         &lt;chr&gt;         
-##  1 lake fishes   anguilliformes
-##  2 river fishes  cypriniformes 
-##  3 river fishes  cypriniformes 
-##  4 river fishes  cypriniformes 
-##  5 river fishes  cypriniformes 
-##  6 river fishes  esociformes   
-##  7 marine fishes gadiformes    
-##  8 marine fishes gadiformes    
-##  9 marine fishes perciformes   
-## 10 marine fishes perciformes   
-## # ℹ 559 more rows</code></pre>
+<pre class="r"><code>class_t &lt;- as.factor(homerange$taxon)
+levels(class_t)</code></pre>
+<pre><code>## [1] &quot;birds&quot;         &quot;lake fishes&quot;   &quot;lizards&quot;       &quot;mammals&quot;      
+## [5] &quot;marine fishes&quot; &quot;river fishes&quot;  &quot;snakes&quot;        &quot;tortoises&quot;    
+## [9] &quot;turtles&quot;</code></pre>
+<pre class="r"><code>class_o &lt;- as.factor(homerange$order)
+levels(class_o)</code></pre>
+<pre><code>##  [1] &quot;accipitriformes&quot;       &quot;afrosoricida&quot;          &quot;anguilliformes&quot;       
+##  [4] &quot;anseriformes&quot;          &quot;apterygiformes&quot;        &quot;artiodactyla&quot;         
+##  [7] &quot;caprimulgiformes&quot;      &quot;carnivora&quot;             &quot;charadriiformes&quot;      
+## [10] &quot;columbidormes&quot;         &quot;columbiformes&quot;         &quot;coraciiformes&quot;        
+## [13] &quot;cuculiformes&quot;          &quot;cypriniformes&quot;         &quot;dasyuromorpha&quot;        
+## [16] &quot;dasyuromorpia&quot;         &quot;didelphimorphia&quot;       &quot;diprodontia&quot;          
+## [19] &quot;diprotodontia&quot;         &quot;erinaceomorpha&quot;        &quot;esociformes&quot;          
+## [22] &quot;falconiformes&quot;         &quot;gadiformes&quot;            &quot;galliformes&quot;          
+## [25] &quot;gruiformes&quot;            &quot;lagomorpha&quot;            &quot;macroscelidea&quot;        
+## [28] &quot;monotrematae&quot;          &quot;passeriformes&quot;         &quot;pelecaniformes&quot;       
+## [31] &quot;peramelemorphia&quot;       &quot;perciformes&quot;           &quot;perissodactyla&quot;       
+## [34] &quot;piciformes&quot;            &quot;pilosa&quot;                &quot;proboscidea&quot;          
+## [37] &quot;psittaciformes&quot;        &quot;rheiformes&quot;            &quot;roden&quot;                
+## [40] &quot;rodentia&quot;              &quot;salmoniformes&quot;         &quot;scorpaeniformes&quot;      
+## [43] &quot;siluriformes&quot;          &quot;soricomorpha&quot;          &quot;squamata&quot;             
+## [46] &quot;strigiformes&quot;          &quot;struthioniformes&quot;      &quot;syngnathiformes&quot;      
+## [49] &quot;testudines&quot;            &quot;tetraodontiformes\xa0&quot; &quot;tinamiformes&quot;</code></pre>
 <p><strong>4. What taxa are represented in the <code>homerange</code>
 data frame? Make a new data frame <code>taxa</code> that is restricted
 to taxon, common name, class, order, family, genus,
