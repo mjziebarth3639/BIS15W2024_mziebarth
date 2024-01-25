@@ -1,0 +1,27 @@
+---
+title: "studyguide_bis15lw24"
+author: "Maya Ziebarth"
+date: "2024-01-25"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Always load tidyverse
+```{r}
+library(tidyverse)
+```
+
+`?` Asks a question about the code 
+```{r}
+?mean
+```
+
+To make an object, use the `<-` whihc means `gets` and the `c()`
+```{r}
+x <- c(2, 8, 6, 6, 7, 4, 9, 9, 9, 10)
+# Translation: the value x gets the numbers `2, 8, 6, 6, 7, 4, 9, 9, 9, 10`.
+```
+
