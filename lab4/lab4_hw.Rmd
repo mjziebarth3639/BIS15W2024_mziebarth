@@ -34,10 +34,12 @@ Data: http://datadryad.org/resource/doi:10.5061/dryad.q5j65/1
 homerange <- read_csv("data/Tamburelloetal_HomeRangeDatabase.csv")
 ```
 
+
 **2. Explore the data. Show the dimensions, column names, classes for each variable, and a statistical summary. Keep these as separate code chunks.**  
 ```{r}
 dim(homerange)
 ```
+
 ```{r}
 names(homerange)
 ```
@@ -45,6 +47,7 @@ names(homerange)
 ```{r}
 class(homerange)
 ```
+
 ```{r}
 summary(homerange)
 ```
@@ -53,23 +56,28 @@ summary(homerange)
 
 **3. Change the class of the variables `taxon` and `order` to factors and display their levels.**  
 ```{r}
-
+select(homerange, "taxon", "order")
 ```
 
 **4. What taxa are represented in the `homerange` data frame? Make a new data frame `taxa` that is restricted to taxon, common name, class, order, family, genus, species.**  
 ```{r}
-
+taxa <- select(homerange, taxon:species)
+taxa
 ```
 
 **5. The variable `taxon` identifies the common name groups of the species represented in `homerange`. Make a table the shows the counts for each of these `taxon`.**  
 ```{r}
-
+select(homerange, "taxon","common.name", "N")
 ```
 
 **6. The species in `homerange` are also classified into trophic guilds. How many species are represented in each trophic guild.**  
 ```{r}
-
+table(homerange$trophic.guild)
 ```
+
+
+
+
 
 **7. Make two new data frames, one which is restricted to carnivores and another that is restricted to herbivores.**  
 ```{r}

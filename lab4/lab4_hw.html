@@ -11,7 +11,7 @@
 
 <meta name="author" content="Please Add Your Name Here" />
 
-<meta name="date" content="2024-01-23" />
+<meta name="date" content="2024-01-24" />
 
 <title>Lab 4 Homework</title>
 
@@ -376,7 +376,7 @@ display: none;
 
 <h1 class="title toc-ignore">Lab 4 Homework</h1>
 <h4 class="author">Please Add Your Name Here</h4>
-<h4 class="date">2024-01-23</h4>
+<h4 class="date">2024-01-24</h4>
 
 </div>
 
@@ -494,17 +494,67 @@ separate code chunks.</strong></p>
 ##  NA&#39;s   :502</code></pre>
 <p><strong>3. Change the class of the variables <code>taxon</code> and
 <code>order</code> to factors and display their levels.</strong></p>
+<pre class="r"><code>select(homerange, &quot;taxon&quot;, &quot;order&quot;)</code></pre>
+<pre><code>## # A tibble: 569 × 2
+##    taxon         order         
+##    &lt;chr&gt;         &lt;chr&gt;         
+##  1 lake fishes   anguilliformes
+##  2 river fishes  cypriniformes 
+##  3 river fishes  cypriniformes 
+##  4 river fishes  cypriniformes 
+##  5 river fishes  cypriniformes 
+##  6 river fishes  esociformes   
+##  7 marine fishes gadiformes    
+##  8 marine fishes gadiformes    
+##  9 marine fishes perciformes   
+## 10 marine fishes perciformes   
+## # ℹ 559 more rows</code></pre>
 <p><strong>4. What taxa are represented in the <code>homerange</code>
 data frame? Make a new data frame <code>taxa</code> that is restricted
 to taxon, common name, class, order, family, genus,
 species.</strong></p>
+<pre class="r"><code>taxa &lt;- select(homerange, taxon:species)
+taxa</code></pre>
+<pre><code>## # A tibble: 569 × 7
+##    taxon         common.name             class        order family genus species
+##    &lt;chr&gt;         &lt;chr&gt;                   &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  
+##  1 lake fishes   american eel            actinoptery… angu… angui… angu… rostra…
+##  2 river fishes  blacktail redhorse      actinoptery… cypr… catos… moxo… poecil…
+##  3 river fishes  central stoneroller     actinoptery… cypr… cypri… camp… anomal…
+##  4 river fishes  rosyside dace           actinoptery… cypr… cypri… clin… fundul…
+##  5 river fishes  longnose dace           actinoptery… cypr… cypri… rhin… catara…
+##  6 river fishes  muskellunge             actinoptery… esoc… esoci… esox  masqui…
+##  7 marine fishes pollack                 actinoptery… gadi… gadid… poll… pollac…
+##  8 marine fishes saithe                  actinoptery… gadi… gadid… poll… virens 
+##  9 marine fishes lined surgeonfish       actinoptery… perc… acant… acan… lineat…
+## 10 marine fishes orangespine unicornfish actinoptery… perc… acant… naso  litura…
+## # ℹ 559 more rows</code></pre>
 <p><strong>5. The variable <code>taxon</code> identifies the common name
 groups of the species represented in <code>homerange</code>. Make a
 table the shows the counts for each of these
 <code>taxon</code>.</strong></p>
+<pre class="r"><code>select(homerange, &quot;taxon&quot;,&quot;common.name&quot;, &quot;N&quot;)</code></pre>
+<pre><code>## # A tibble: 569 × 3
+##    taxon         common.name             N    
+##    &lt;chr&gt;         &lt;chr&gt;                   &lt;chr&gt;
+##  1 lake fishes   american eel            16   
+##  2 river fishes  blacktail redhorse      &lt;NA&gt; 
+##  3 river fishes  central stoneroller     20   
+##  4 river fishes  rosyside dace           26   
+##  5 river fishes  longnose dace           17   
+##  6 river fishes  muskellunge             5    
+##  7 marine fishes pollack                 2    
+##  8 marine fishes saithe                  2    
+##  9 marine fishes lined surgeonfish       &lt;NA&gt; 
+## 10 marine fishes orangespine unicornfish 8    
+## # ℹ 559 more rows</code></pre>
 <p><strong>6. The species in <code>homerange</code> are also classified
 into trophic guilds. How many species are represented in each trophic
 guild.</strong></p>
+<pre class="r"><code>table(homerange$trophic.guild)</code></pre>
+<pre><code>## 
+## carnivore herbivore 
+##       342       227</code></pre>
 <p><strong>7. Make two new data frames, one which is restricted to
 carnivores and another that is restricted to herbivores.</strong></p>
 <p><strong>8. Do herbivores or carnivores have, on average, a larger
