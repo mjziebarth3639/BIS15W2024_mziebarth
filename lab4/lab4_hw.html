@@ -394,7 +394,8 @@ report neat and clean!</p>
 </div>
 <div id="load-the-tidyverse" class="section level2">
 <h2>Load the tidyverse</h2>
-<pre class="r"><code>library(tidyverse)</code></pre>
+<pre class="r"><code>library(tidyverse)
+library(janitor)</code></pre>
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
@@ -415,6 +416,26 @@ Data: <a href="http://datadryad.org/resource/doi:10.5061/dryad.q5j65/1" class="u
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>clean_names(homerange)</code></pre>
+<pre><code>## # A tibble: 569 × 24
+##    taxon        common_name class order family genus species primarymethod n    
+##    &lt;chr&gt;        &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;         &lt;chr&gt;
+##  1 lake fishes  american e… acti… angu… angui… angu… rostra… telemetry     16   
+##  2 river fishes blacktail … acti… cypr… catos… moxo… poecil… mark-recaptu… &lt;NA&gt; 
+##  3 river fishes central st… acti… cypr… cypri… camp… anomal… mark-recaptu… 20   
+##  4 river fishes rosyside d… acti… cypr… cypri… clin… fundul… mark-recaptu… 26   
+##  5 river fishes longnose d… acti… cypr… cypri… rhin… catara… mark-recaptu… 17   
+##  6 river fishes muskellunge acti… esoc… esoci… esox  masqui… telemetry     5    
+##  7 marine fish… pollack     acti… gadi… gadid… poll… pollac… telemetry     2    
+##  8 marine fish… saithe      acti… gadi… gadid… poll… virens  telemetry     2    
+##  9 marine fish… lined surg… acti… perc… acant… acan… lineat… direct obser… &lt;NA&gt; 
+## 10 marine fish… orangespin… acti… perc… acant… naso  litura… telemetry     8    
+## # ℹ 559 more rows
+## # ℹ 15 more variables: mean_mass_g &lt;dbl&gt;, log10_mass &lt;dbl&gt;,
+## #   alternative_mass_reference &lt;chr&gt;, mean_hra_m2 &lt;dbl&gt;, log10_hra &lt;dbl&gt;,
+## #   hra_reference &lt;chr&gt;, realm &lt;chr&gt;, thermoregulation &lt;chr&gt;, locomotion &lt;chr&gt;,
+## #   trophic_guild &lt;chr&gt;, dimension &lt;dbl&gt;, preymass &lt;dbl&gt;, log10_preymass &lt;dbl&gt;,
+## #   ppmr &lt;dbl&gt;, prey_size_reference &lt;chr&gt;</code></pre>
 <p><strong>2. Explore the data. Show the dimensions, column names,
 classes for each variable, and a statistical summary. Keep these as
 separate code chunks.</strong></p>
@@ -560,10 +581,9 @@ table the shows the counts for each of these
 <p><strong>6. The species in <code>homerange</code> are also classified
 into trophic guilds. How many species are represented in each trophic
 guild.</strong></p>
-<pre class="r"><code>table(homerange$trophic.guild)</code></pre>
-<pre><code>## 
-## carnivore herbivore 
-##       342       227</code></pre>
+<pre class="r"><code>table(homerange$trophic_guild)</code></pre>
+<pre><code>## Warning: Unknown or uninitialised column: `trophic_guild`.</code></pre>
+<pre><code>## &lt; table of extent 0 &gt;</code></pre>
 <p><strong>7. Make two new data frames, one which is restricted to
 carnivores and another that is restricted to herbivores.</strong></p>
 <pre class="r"><code>carnivores &lt;- filter(homerange, trophic.guild==&quot;carnivore&quot;)
@@ -653,30 +673,55 @@ owls</code></pre>
 ## 7      1920         3.28 strigidae nyctea     scandiaca   snowy owl         
 ## 8       519         2.72 strigidae strix      aluco       tawny owl         
 ## 9       285         2.45 tytonidae tyto       alba        barn owl</code></pre>
+<pre class="r"><code>owls %&gt;% 
+  arrange(desc(owls$mean.mass.g))</code></pre>
+<pre><code>## # A tibble: 9 × 6
+##   mean.mass.g log10.mass family    genus      species     common.name       
+##         &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;             
+## 1      2191         3.34 strigidae bubo       bubo        Eurasian eagle-owl
+## 2      1920         3.28 strigidae nyctea     scandiaca   snowy owl         
+## 3      1510         3.18 strigidae bubo       virginianus great horned owl  
+## 4       519         2.72 strigidae strix      aluco       tawny owl         
+## 5       285         2.45 tytonidae tyto       alba        barn owl          
+## 6       252         2.40 strigidae asio       otus        long-eared owl    
+## 7       156.        2.19 strigidae athene     noctua      little owl        
+## 8       119         2.08 strigidae aegolius   funereus    boreal owl        
+## 9        61.3       1.79 strigidae glaucidium passerinum  Eurasian pygmy owl</code></pre>
 <p><strong>10. As measured by the data, which bird species has the
 largest homerange? Show all of your work, please. Look this species up
 online and tell me about it!</strong>.</p>
-<pre class="r"><code>aves &lt;- filter(homerange, class==&quot;aves&quot;)
+<pre class="r"><code>aves &lt;- select(homerange, &quot;class&quot;, &quot;common.name&quot;, &quot;species&quot;, &quot;mean.hra.m2&quot;)
 aves</code></pre>
-<pre><code>## # A tibble: 140 × 24
-##    taxon common.name        class order family genus species primarymethod N    
-##    &lt;chr&gt; &lt;chr&gt;              &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;         &lt;chr&gt;
-##  1 birds golden eagle       aves  acci… accip… aqui… chrysa… telemetry*    &lt;NA&gt; 
-##  2 birds common buzzard     aves  acci… accip… buteo buteo   telemetry*    &lt;NA&gt; 
-##  3 birds short-toed snake … aves  acci… accip… circ… gallic… telemetry*    &lt;NA&gt; 
-##  4 birds Bonelli&#39;s eagle    aves  acci… accip… hier… fascia… telemetry*    &lt;NA&gt; 
-##  5 birds booted eagle       aves  acci… accip… hier… pennat… telemetry     4    
-##  6 birds Egyptian vulture   aves  acci… accip… neop… percno… telemetry*    &lt;NA&gt; 
-##  7 birds gadwall            aves  anse… anati… anas  strepe… telemetry     3    
-##  8 birds northern brown ki… aves  apte… apter… apte… austra… telemetry     6    
-##  9 birds European nightjar  aves  capr… capri… capr… europa… telemetry*    &lt;NA&gt; 
-## 10 birds oystercatcher      aves  char… haema… haem… ostral… telemetry     8    
-## # ℹ 130 more rows
-## # ℹ 15 more variables: mean.mass.g &lt;dbl&gt;, log10.mass &lt;dbl&gt;,
-## #   alternative.mass.reference &lt;chr&gt;, mean.hra.m2 &lt;dbl&gt;, log10.hra &lt;dbl&gt;,
-## #   hra.reference &lt;chr&gt;, realm &lt;chr&gt;, thermoregulation &lt;chr&gt;, locomotion &lt;chr&gt;,
-## #   trophic.guild &lt;chr&gt;, dimension &lt;dbl&gt;, preymass &lt;dbl&gt;, log10.preymass &lt;dbl&gt;,
-## #   PPMR &lt;dbl&gt;, prey.size.reference &lt;chr&gt;</code></pre>
+<pre><code>## # A tibble: 569 × 4
+##    class          common.name             species     mean.hra.m2
+##    &lt;chr&gt;          &lt;chr&gt;                   &lt;chr&gt;             &lt;dbl&gt;
+##  1 actinopterygii american eel            rostrata       282750  
+##  2 actinopterygii blacktail redhorse      poecilura         282. 
+##  3 actinopterygii central stoneroller     anomalum          116. 
+##  4 actinopterygii rosyside dace           funduloides       126. 
+##  5 actinopterygii longnose dace           cataractae         87.1
+##  6 actinopterygii muskellunge             masquinongy     39344. 
+##  7 actinopterygii pollack                 pollachius       9056. 
+##  8 actinopterygii saithe                  virens          44516. 
+##  9 actinopterygii lined surgeonfish       lineatus           11.1
+## 10 actinopterygii orangespine unicornfish lituratus       32093. 
+## # ℹ 559 more rows</code></pre>
+<pre class="r"><code>aves %&gt;% 
+  arrange(desc(mean.hra.m2))</code></pre>
+<pre><code>## # A tibble: 569 × 4
+##    class    common.name           species      mean.hra.m2
+##    &lt;chr&gt;    &lt;chr&gt;                 &lt;chr&gt;              &lt;dbl&gt;
+##  1 mammalia reindeer              tarandus     3550830977 
+##  2 mammalia African bush elephant africana     1753759352 
+##  3 mammalia greater kudu          strepsiceros 1070039969 
+##  4 mammalia cheetah               jubatus       815060788.
+##  5 mammalia leopard               pardus        504940261.
+##  6 mammalia caracal               caracal       376634414 
+##  7 mammalia wolverine             gulo          361917847.
+##  8 mammalia cougar                concolor      312003884.
+##  9 mammalia American bison        bison         265778594.
+## 10 aves     caracara              cheriway      241000000 
+## # ℹ 559 more rows</code></pre>
 </div>
 <div id="push-your-final-code-to-github" class="section level2">
 <h2>Push your final code to GitHub!</h2>

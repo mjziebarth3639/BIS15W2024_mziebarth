@@ -20,6 +20,7 @@ Make sure to use the formatting conventions of RMarkdown to make your report nea
 ## Load the tidyverse
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
+library(janitor)
 ```
 
 ## Data
@@ -32,6 +33,11 @@ Data: http://datadryad.org/resource/doi:10.5061/dryad.q5j65/1
 **1. Load the data into a new object called `homerange`.**
 ```{r}
 homerange <- read_csv("data/Tamburelloetal_HomeRangeDatabase.csv")
+```
+
+
+```{r}
+clean_names(homerange)
 ```
 
 
@@ -79,7 +85,7 @@ select(homerange, "taxon","common.name", "N")
 
 **6. The species in `homerange` are also classified into trophic guilds. How many species are represented in each trophic guild.**  
 ```{r}
-table(homerange$trophic.guild)
+table(homerange$trophic_guild)
 ```
 
 
@@ -120,14 +126,22 @@ owls <- select(owl, "mean.mass.g", "log10.mass", "family", "genus", "species", "
 owls
 ```
 
+```{r}
+owls %>% 
+  arrange(desc(owls$mean.mass.g))
+```
+
 
 **10. As measured by the data, which bird species has the largest homerange? Show all of your work, please. Look this species up online and tell me about it!**.  
 ```{r}
-aves <- filter(homerange, class=="aves")
+aves <- select(homerange, "class", "common.name", "species", "mean.hra.m2")
 aves
 ```
-```{r}
 
+
+```{r}
+aves %>% 
+  arrange(desc(mean.hra.m2))
 ```
 
 ## Push your final code to GitHub!
