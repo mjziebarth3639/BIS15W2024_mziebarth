@@ -5,9 +5,12 @@ date: "2024-01-25"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, EVAL = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(eval = FALSE)
 ```
+
+#### Basics 
 
 Always load tidyverse
 ```{r}
@@ -19,9 +22,369 @@ library(tidyverse)
 ?mean
 ```
 
-To make an object, use the `<-` whihc means `gets` and the `c()`
+To make an object, use the '<-' which means 'gets' and the 'c()'
 ```{r}
 x <- c(2, 8, 6, 6, 7, 4, 9, 9, 9, 10)
 # Translation: the value x gets the numbers `2, 8, 6, 6, 7, 4, 9, 9, 9, 10`.
+# you can use 'gets' to name a vector or data frame as well
+y <- c(9, 4, 5)
 ```
+
+Mean
+```{r}
+mean(x)
+```
+
+Median
+```{r}
+median(x)
+```
+
+DEF: A vector is an ordered list/collection of variables in a container. It’s a common way of organizing data
+
+DEF: A data matrix is a collection of the same type of data elements (numberical, character, ect) in rows or columns.
+
+Other basic funtions include 
+```{r}
+8*9 #Mulitplication 
+8/9 #Division 
+8+9 #addition 
+8-9 #subtraction
+```
+The 5 types of 'classes' 
+```{r}
+my_numeric <- 42
+my_integer <- 2L #adding an L automatically denotes an integer
+my_character <- "universe"
+my_logical <- FALSE
+my_complex <- 2+4i
+```
+
+To find the 'class' you are working with, use 'class()'
+```{r}
+class(my_numeric)
+```
+
+To clarify or specify is a class use 'is.' and 'as.' in the beginning 
+```{r}
+is.integer(my_numeric)
+#Translation: is the value 'my_numberic' an integer?
+```
+
+```{r}
+my_integer <- as.integer(my_numeric)
+#Translation: create a new object that specifies it's an interger
+is.integer(my_integer)
+#Translation: is my integer an integer
+```
+
+If there is any NA's or missing data that messes up your code, use
+```{r}
+na <- NA
+is.na(na)
+# or use anyna()
+```
+If you want to get rid of any NAs, use 
+```{r}
+mean(x, na.rm=T)
+```
+
+A numeric vector looks like 
+```{r}
+vector <- c(10, 20, 30)
+# you can make a sequence by doinc c(1:100) if you want every number between 1 and 100
+```
+
+A character vector looks like
+```{r}
+character <- c("monday", "tuesday", "wednesday ")
+```
+
+To find vector elements use []
+```{r}
+character[3]
+#wednesday is the 3rd value 
+```
+
+
+#### How to create a data.matrix
+these values were given, the movie names are variables/characters and the numbers are values/numeric 
+```{r}
+Philosophers_Stone <- c(317.5, 657.1)
+Chamber_of_Secrets <- c(261.9, 616.9)
+Prisoner_of_Azkaban <- c(249.5, 547.1)
+Goblet_of_Fire <- c(290.0, 606.8)
+Order_of_the_Phoenix <- c(292.0, 647.8)
+Half_Blood_Prince <- c(301.9, 632.4)
+Deathly_Hallows_1 <- c(295.9, 664.3)
+Deathly_Hallows_2 <- c(381.0, 960.5)
+```
+
+1) Start by creating a new object 
+```{r}
+movies <- c(Philosophers_Stone , Chamber_of_Secrets , Prisoner_of_Azkaban , Goblet_of_Fire , Order_of_the_Phoenix , Half_Blood_Prince , Deathly_Hallows_1 , Deathly_Hallows_2)
+movies 
+```
+
+2) create the matrix using the code 'matrix(x, nrow=number of rows , byrow = T)
+```{r}
+hp_matrix <- matrix(movies, nrow=8, byrow = T) 
+# The number of rows are determines by the amount of variables
+hp_matrix
+```
+
+3) Name the column using the 'region <- c("name1" , "name 2" , ...)' command then use the 'colnames()' to offically name the columns
+```{r}
+region <- c("us", "non_us")
+region
+```
+
+```{r}
+colnames(hp_matrix) <- region
+```
+
+  Use the row using the 'titles <- c("variable 11" , "variable 2", ...) the the 'rownames' to officially name the rows 
+```{r}
+titles <- c("Philosophers_Stone", "Chamber_of_Secrets", "Prisoner_of_Azkaban", "Goblet_of_Fire", "Order_of_the_Phoenix", "Half_Blood_Prince", "Deathly_Hallows_1", "Deathly_Hallows_2")
+titles
+```
+
+```{r}
+rownames(hp_matrix) <- titles
+```
+
+4) Run the matrix a final time 
+```{r}
+hp_matrix
+```
+
+
+#### Some ways to use a data matirx
+To add all the rows together 
+```{r}
+rowsums <- rowSums(hp_matrix)
+rowsums
+```
+
+To add a new row to the original matrix 
+```{r}
+hp_matrix_new <- cbind(hp_matrix, rowsums)
+hp_matrix_new
+```
+
+To find the mean of a specific column 
+```{r}
+non_us_earnings <- hp_matrix_new[ ,2]
+mean(non_us_earnings)
+# cannot use '$' for this situation because the of the type of vector; when you use a c() to create the vector, it makes it atomic and not able to opperate as it's one-dimentional
+```
+
+
+#### How to make and use data.frame
+DEF: "The data frame is the most common way to organize data within R. You can think of a data frame as similar to a spreadsheet. A data frame can store data of many different classes."
+
+Data frames vs. Data matrix 
+They are differnet beause a data frame can hold numerous classes of data while a data matrix can only contain one type of class. Data frames also prename the columns, which makes your jobs easier. They also look different
+
+1) Start by running the vectors 
+```{r}
+sex <- c("girl", "boy", "girl")
+length <- c(19.8 , 20.34 , 18.4)
+weight <- c(7.4 , 8.7 , 6.9)
+```
+
+2) Combine the vectors to make a dataframe with teh command data.frame
+```{r}
+newborns <- data.frame(sex, length, weight)
+newborns
+```
+
+If you want to access a data point use
+```{r}
+newborns[ ,3]
+# this is the same as a data matrix
+```
+
+To add rows, first run the new variables, then use 'rbind' 
+```{r}
+baby4 <- c("boy" , 23.05 , 9.1)
+baby4
+```
+
+```{r}
+newborns <- rbind(newborns, baby4)
+newborns 
+```
+To add columns, use the '$' 
+```{r}
+newborns$eye_color <- c("brown" , "brown" , "blue" , "brown")
+newborns
+```
+
+
+#### .CSV
+To write and save data as a .csv file, use
+```{r}
+write.csv(newborns, "newborns_data.csv", row.names = FALSE)
+```
+
+To import a .csv file, use
+```{r}
+newborns <- read_csv("newborns_data.csv")
+#Make sure your in teh right directory i.e. correct lab and correct data file
+#Usually there will be a "data/..." before because the data will be given
+```
+#### Summary Fuctions 
+
+These are basic functions that show specific information of the data
+
+summarizes data
+```{r}
+summary(newborns)
+```
+
+same as summary but shorter 
+```{r}
+glimpse(newborns)
+```
+
+Use str() to show the structure of the data frame and its individual columns
+```{r}
+str(newborns)
+```
+
+the numbers of rows.
+```{r}
+nrow(newborns)
+```
+
+the number of columns.
+```{r}
+ncol(newborns)
+```
+
+the dimensions.
+```{r}
+dim(newborns)
+```
+
+the column names.
+```{r}
+names(newborns)
+```
+
+'heads()' shows the first n rows of the data frame.
+```{r}
+head(newborns) 
+#works better with large amounts of data
+```
+
+'tails()' shows the last n rows of the data frame.
+```{r}
+tail(newborns) 
+#works better with large amounts of data
+```
+
+'table()'is useful when you have a limited number of categorical variables
+```{r, EVAL = TRUE}
+table(newborns$eye_color) 
+```
+
+#### Extracting data
+
+DEF: dplyr: "dplyr is used to transform data frames by extracting, rearranging, and summarizing data such that they are focused on a question of interest"
+
+#### Select: Allows you to pull out columns of interest. It works best with large data sets as it's hard to see values. 
+
+the basic command is 'select(data, "name", "name", ...)'
+```{r}
+select(newborns, "length" , "weight")
+```
+
+if you want to grab numerous sections us a ':'
+```{r}
+select(newborns, "sex":"weight")
+```
+
+if you want to keep sections and not some, use '-'
+```{r}
+select(newborns, -"length")
+```
+
+contains 
+```{r}
+select(newborns, contains("l"))
+```
+
+
+starts with
+```{r}
+select(newborns, starts_with("eye"))
+```
+
+ends with 
+```{r}
+select(newborns, ends_with("th"))
+```
+
+if you want to pull a certain class
+```{r}
+select_if(newborns, is.numeric)
+```
+
+
+
+#### Filter: 
+Allows you to pull out certain values of interest. while select us used to pull columns, filter us used to pull specific data within a column. 
+
+if you want the data to equal a value use '=='
+```{r}
+filter(newborns, sex=="boy")
+```
+
+if you want a certain numerical value greater or lesser than a certain point use '>= and <='
+```{r}
+filter(newborns, length <= 20)
+```
+
+if you want a everything but a value use '!=' (not equal)
+```{r}
+filter(newborns, eye_color != "blue")
+```
+
+if you want something between certain points is '%in%'
+```{r}
+filter(newborns, length %in% c(19.8, 20.34))
+#this mean includes, the values you input have to be a value in the table otherwise it wont run
+```
+if you want something near an value 
+```{r}
+filter(newborns, near(weight, 7, tol = .5))
+# not used often in class, tol mean how close to the number you want to be 
+```
+if you want something '&'
+```{r}
+filter(newborns, sex=="boy" & length >= 21)
+```
+
+
+if you want something or soemthing else '|'. This only works if they variables can't be true at the same time.
+```{r}
+filter(newborns, eye_color=="brown" | weight <= 8)
+```
+
+
+
+#### Pipes
+
+Use these when you want to combine specified data (shift+command+m)
+```{r}
+newborns %>% 
+  select("sex", "weight") %>% 
+  filter(weight >= 7 & sex != "boy")
+```
+
+
+
+
 

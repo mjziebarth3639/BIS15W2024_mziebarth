@@ -357,24 +357,244 @@ display: none;
 </div>
 
 
+<div id="basics" class="section level4">
+<h4>Basics</h4>
 <p>Always load tidyverse</p>
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.4     ✔ readr     2.1.4
-## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
-## ✔ purrr     1.0.2     
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 <p><code>?</code> Asks a question about the code</p>
 <pre class="r"><code>?mean</code></pre>
-<p>To make an object, use the <code>&lt;-</code> whihc means
-<code>gets</code> and the <code>c()</code></p>
+<p>To make an object, use the ‘&lt;-’ which means ‘gets’ and the
+‘c()’</p>
 <pre class="r"><code>x &lt;- c(2, 8, 6, 6, 7, 4, 9, 9, 9, 10)
-# Translation: the value x gets the numbers `2, 8, 6, 6, 7, 4, 9, 9, 9, 10`.</code></pre>
+# Translation: the value x gets the numbers `2, 8, 6, 6, 7, 4, 9, 9, 9, 10`.
+# you can use &#39;gets&#39; to name a vector or data frame as well
+y &lt;- c(9, 4, 5)</code></pre>
+<p>Mean</p>
+<pre class="r"><code>mean(x)</code></pre>
+<p>Median</p>
+<pre class="r"><code>median(x)</code></pre>
+<p>DEF: A vector is an ordered list/collection of variables in a
+container. It’s a common way of organizing data</p>
+<p>DEF: A data matrix is a collection of the same type of data elements
+(numberical, character, ect) in rows or columns.</p>
+<p>Other basic funtions include</p>
+<pre class="r"><code>8*9 #Mulitplication 
+8/9 #Division 
+8+9 #addition 
+8-9 #subtraction</code></pre>
+<p>The 5 types of ‘classes’</p>
+<pre class="r"><code>my_numeric &lt;- 42
+my_integer &lt;- 2L #adding an L automatically denotes an integer
+my_character &lt;- &quot;universe&quot;
+my_logical &lt;- FALSE
+my_complex &lt;- 2+4i</code></pre>
+<p>To find the ‘class’ you are working with, use ‘class()’</p>
+<pre class="r"><code>class(my_numeric)</code></pre>
+<p>To clarify or specify is a class use ‘is.’ and ‘as.’ in the
+beginning</p>
+<pre class="r"><code>is.integer(my_numeric)
+#Translation: is the value &#39;my_numberic&#39; an integer?</code></pre>
+<pre class="r"><code>my_integer &lt;- as.integer(my_numeric)
+#Translation: create a new object that specifies it&#39;s an interger
+is.integer(my_integer)
+#Translation: is my integer an integer</code></pre>
+<p>If there is any NA’s or missing data that messes up your code,
+use</p>
+<pre class="r"><code>na &lt;- NA
+is.na(na)
+# or use anyna()</code></pre>
+<p>If you want to get rid of any NAs, use</p>
+<pre class="r"><code>mean(x, na.rm=T)</code></pre>
+<p>A numeric vector looks like</p>
+<pre class="r"><code>vector &lt;- c(10, 20, 30)
+# you can make a sequence by doinc c(1:100) if you want every number between 1 and 100</code></pre>
+<p>A character vector looks like</p>
+<pre class="r"><code>character &lt;- c(&quot;monday&quot;, &quot;tuesday&quot;, &quot;wednesday &quot;)</code></pre>
+<p>To find vector elements use []</p>
+<pre class="r"><code>character[3]
+#wednesday is the 3rd value </code></pre>
+</div>
+<div id="how-to-create-a-data.matrix" class="section level4">
+<h4>How to create a data.matrix</h4>
+<p>these values were given, the movie names are variables/characters and
+the numbers are values/numeric</p>
+<pre class="r"><code>Philosophers_Stone &lt;- c(317.5, 657.1)
+Chamber_of_Secrets &lt;- c(261.9, 616.9)
+Prisoner_of_Azkaban &lt;- c(249.5, 547.1)
+Goblet_of_Fire &lt;- c(290.0, 606.8)
+Order_of_the_Phoenix &lt;- c(292.0, 647.8)
+Half_Blood_Prince &lt;- c(301.9, 632.4)
+Deathly_Hallows_1 &lt;- c(295.9, 664.3)
+Deathly_Hallows_2 &lt;- c(381.0, 960.5)</code></pre>
+<ol style="list-style-type: decimal">
+<li>Start by creating a new object</li>
+</ol>
+<pre class="r"><code>movies &lt;- c(Philosophers_Stone , Chamber_of_Secrets , Prisoner_of_Azkaban , Goblet_of_Fire , Order_of_the_Phoenix , Half_Blood_Prince , Deathly_Hallows_1 , Deathly_Hallows_2)
+movies </code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>create the matrix using the code ’matrix(x, nrow=number of rows ,
+byrow = T)</li>
+</ol>
+<pre class="r"><code>hp_matrix &lt;- matrix(movies, nrow=8, byrow = T) 
+# The number of rows are determines by the amount of variables
+hp_matrix</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Name the column using the ‘region &lt;- c(“name1” , “name 2” , …)’
+command then use the ‘colnames()’ to offically name the columns</li>
+</ol>
+<pre class="r"><code>region &lt;- c(&quot;us&quot;, &quot;non_us&quot;)
+region</code></pre>
+<pre class="r"><code>colnames(hp_matrix) &lt;- region</code></pre>
+<p>Use the row using the ‘titles &lt;- c(“variable 11” , “variable 2”,
+…) the the ’rownames’ to officially name the rows</p>
+<pre class="r"><code>titles &lt;- c(&quot;Philosophers_Stone&quot;, &quot;Chamber_of_Secrets&quot;, &quot;Prisoner_of_Azkaban&quot;, &quot;Goblet_of_Fire&quot;, &quot;Order_of_the_Phoenix&quot;, &quot;Half_Blood_Prince&quot;, &quot;Deathly_Hallows_1&quot;, &quot;Deathly_Hallows_2&quot;)
+titles</code></pre>
+<pre class="r"><code>rownames(hp_matrix) &lt;- titles</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Run the matrix a final time</li>
+</ol>
+<pre class="r"><code>hp_matrix</code></pre>
+</div>
+<div id="some-ways-to-use-a-data-matirx" class="section level4">
+<h4>Some ways to use a data matirx</h4>
+<p>To add all the rows together</p>
+<pre class="r"><code>rowsums &lt;- rowSums(hp_matrix)
+rowsums</code></pre>
+<p>To add a new row to the original matrix</p>
+<pre class="r"><code>hp_matrix_new &lt;- cbind(hp_matrix, rowsums)
+hp_matrix_new</code></pre>
+<p>To find the mean of a specific column</p>
+<pre class="r"><code>non_us_earnings &lt;- hp_matrix_new[ ,2]
+mean(non_us_earnings)
+# cannot use &#39;$&#39; for this situation because the of the type of vector; when you use a c() to create the vector, it makes it atomic and not able to opperate as it&#39;s one-dimentional</code></pre>
+</div>
+<div id="how-to-make-and-use-data.frame" class="section level4">
+<h4>How to make and use data.frame</h4>
+<p>DEF: “The data frame is the most common way to organize data within
+R. You can think of a data frame as similar to a spreadsheet. A data
+frame can store data of many different classes.”</p>
+<p>Data frames vs. Data matrix They are differnet beause a data frame
+can hold numerous classes of data while a data matrix can only contain
+one type of class. Data frames also prename the columns, which makes
+your jobs easier. They also look different</p>
+<ol style="list-style-type: decimal">
+<li>Start by running the vectors</li>
+</ol>
+<pre class="r"><code>sex &lt;- c(&quot;girl&quot;, &quot;boy&quot;, &quot;girl&quot;)
+length &lt;- c(19.8 , 20.34 , 18.4)
+weight &lt;- c(7.4 , 8.7 , 6.9)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Combine the vectors to make a dataframe with teh command
+data.frame</li>
+</ol>
+<pre class="r"><code>newborns &lt;- data.frame(sex, length, weight)
+newborns</code></pre>
+<p>If you want to access a data point use</p>
+<pre class="r"><code>newborns[ ,3]
+# this is the same as a data matrix</code></pre>
+<p>To add rows, first run the new variables, then use ‘rbind’</p>
+<pre class="r"><code>baby4 &lt;- c(&quot;boy&quot; , 23.05 , 9.1)
+baby4</code></pre>
+<pre class="r"><code>newborns &lt;- rbind(newborns, baby4)
+newborns </code></pre>
+<p>To add columns, use the ‘$’</p>
+<pre class="r"><code>newborns$eye_color &lt;- c(&quot;brown&quot; , &quot;brown&quot; , &quot;blue&quot; , &quot;brown&quot;)
+newborns</code></pre>
+</div>
+<div id="csv" class="section level4">
+<h4>.CSV</h4>
+<p>To write and save data as a .csv file, use</p>
+<pre class="r"><code>write.csv(newborns, &quot;newborns_data.csv&quot;, row.names = FALSE)</code></pre>
+<p>To import a .csv file, use</p>
+<pre class="r"><code>newborns &lt;- read_csv(&quot;newborns_data.csv&quot;)
+#Make sure your in teh right directory i.e. correct lab and correct data file
+#Usually there will be a &quot;data/...&quot; before because the data will be given</code></pre>
+</div>
+<div id="summary-fuctions" class="section level4">
+<h4>Summary Fuctions</h4>
+<p>These are basic functions that show specific information of the
+data</p>
+<p>summarizes data</p>
+<pre class="r"><code>summary(newborns)</code></pre>
+<p>same as summary but shorter</p>
+<pre class="r"><code>glimpse(newborns)</code></pre>
+<p>Use str() to show the structure of the data frame and its individual
+columns</p>
+<pre class="r"><code>str(newborns)</code></pre>
+<p>the numbers of rows.</p>
+<pre class="r"><code>nrow(newborns)</code></pre>
+<p>the number of columns.</p>
+<pre class="r"><code>ncol(newborns)</code></pre>
+<p>the dimensions.</p>
+<pre class="r"><code>dim(newborns)</code></pre>
+<p>the column names.</p>
+<pre class="r"><code>names(newborns)</code></pre>
+<p>‘heads()’ shows the first n rows of the data frame.</p>
+<pre class="r"><code>head(newborns) 
+#works better with large amounts of data</code></pre>
+<p>‘tails()’ shows the last n rows of the data frame.</p>
+<pre class="r"><code>tail(newborns) 
+#works better with large amounts of data</code></pre>
+<p>’table()’is useful when you have a limited number of categorical
+variables</p>
+<pre class="r"><code>table(newborns$eye_color) </code></pre>
+</div>
+<div id="extracting-data" class="section level4">
+<h4>Extracting data</h4>
+<p>DEF: dplyr: “dplyr is used to transform data frames by extracting,
+rearranging, and summarizing data such that they are focused on a
+question of interest”</p>
+</div>
+<div id="select-allows-you-to-pull-out-columns-of-interest.-it-works-best-with-large-data-sets-as-its-hard-to-see-values." class="section level4">
+<h4>Select: Allows you to pull out columns of interest. It works best
+with large data sets as it’s hard to see values.</h4>
+<p>the basic command is ‘select(data, “name”, “name”, …)’</p>
+<pre class="r"><code>select(newborns, &quot;length&quot; , &quot;weight&quot;)</code></pre>
+<p>if you want to grab numerous sections us a ‘:’</p>
+<pre class="r"><code>select(newborns, &quot;sex&quot;:&quot;weight&quot;)</code></pre>
+<p>if you want to keep sections and not some, use ‘-’</p>
+<pre class="r"><code>select(newborns, -&quot;length&quot;)</code></pre>
+<p>contains</p>
+<pre class="r"><code>select(newborns, contains(&quot;l&quot;))</code></pre>
+<p>starts with</p>
+<pre class="r"><code>select(newborns, starts_with(&quot;eye&quot;))</code></pre>
+<p>ends with</p>
+<pre class="r"><code>select(newborns, ends_with(&quot;th&quot;))</code></pre>
+<p>if you want to pull a certain class</p>
+<pre class="r"><code>select_if(newborns, is.numeric)</code></pre>
+</div>
+<div id="filter" class="section level4">
+<h4>Filter:</h4>
+<p>Allows you to pull out certain values of interest. while select us
+used to pull columns, filter us used to pull specific data within a
+column.</p>
+<p>if you want the data to equal a value use ‘==’</p>
+<pre class="r"><code>filter(newborns, sex==&quot;boy&quot;)</code></pre>
+<p>if you want a certain numerical value greater or lesser than a
+certain point use ‘&gt;= and &lt;=’</p>
+<pre class="r"><code>filter(newborns, length &lt;= 20)</code></pre>
+<p>if you want a everything but a value use ‘!=’ (not equal)</p>
+<pre class="r"><code>filter(newborns, eye_color != &quot;blue&quot;)</code></pre>
+<p>if you want something between certain points is ‘%in%’</p>
+<pre class="r"><code>filter(newborns, length %in% c(19.8, 20.34))
+#this mean includes, the values you input have to be a value in the table otherwise it wont run</code></pre>
+<p>if you want something near an value</p>
+<pre class="r"><code>filter(newborns, near(weight, 7, tol = .5))
+# not used often in class, tol mean how close to the number you want to be </code></pre>
+<p>if you want something ‘&amp;’</p>
+<pre class="r"><code>filter(newborns, sex==&quot;boy&quot; &amp; length &gt;= 21)</code></pre>
+<p>if you want something or soemthing else ‘|’. This only works if they
+variables can’t be true at the same time.</p>
+<pre class="r"><code>filter(newborns, eye_color==&quot;brown&quot; | weight &lt;= 8)</code></pre>
+</div>
+<div id="pipes" class="section level4">
+<h4>Pipes</h4>
+<p>Use these when you want to combine specified data
+(shift+command+m)</p>
+<pre class="r"><code>newborns %&gt;% 
+  select(&quot;sex&quot;, &quot;weight&quot;) %&gt;% 
+  filter(weight &gt;= 7 &amp; sex != &quot;boy&quot;)</code></pre>
+</div>
 
 
 
