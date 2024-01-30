@@ -234,6 +234,7 @@ newborns <- read_csv("newborns_data.csv")
 #Make sure your in teh right directory i.e. correct lab and correct data file
 #Usually there will be a "data/..." before because the data will be given
 ```
+
 #### Summary Fuctions 
 
 These are basic functions that show specific information of the data
