@@ -135,22 +135,43 @@ superhero_info %>%
 
 11. Let's make a new variable that is the ratio of height to weight. Call this variable `height_weight_ratio`.  
 ```{r}
-#height_weight_ration <- select
+height_weight_ration <- select(superhero_info, "name", "height", "weight")
+height_weight_ration$ratio <- height_weight_ration$weight/height_weight_ration$height
+height_weight_ration
 ```
 
 
 12. Who has the highest height to weight ratio?  
+```{r}
+height_weight_ration %>% 
+  arrange(desc(ratio))
+#Giganta
+```
+
 
 ## `superhero_powers`
 Have a quick look at the `superhero_powers` data frame.  
 
 13. How many superheros have a combination of agility, stealth, super_strength, stamina?
+```{r}
+superhero_powers %>% 
+  filter(agility=="TRUE"& stealth=="TRUE" & super_strength=="TRUE" & stamina=="TRUE" )
+```
+
 
 ## Your Favorite
 14. Pick your favorite superhero and let's see their powers!  
+```{r}
+filter(superhero_powers, hero_names=="Spider-Man")
+```
 
 
 15. Can you find your hero in the superhero_info data? Show their info!  
+```{r}
+filter(superhero_info, name=="Spider-Man")
+#there's 3 spidermans here, but they don't show earth number so I can't find the specific one :/, maybe these people should add that to the list haha 
+```
+
 
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences.  

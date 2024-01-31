@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2024-01-30" />
+<meta name="date" content="2024-01-31" />
 
 <title>dplyr Superhero</title>
 
@@ -1503,7 +1503,7 @@ border-radius: 0px;
 
 
 <h1 class="title toc-ignore">dplyr Superhero</h1>
-<h4 class="date">2024-01-30</h4>
+<h4 class="date">2024-01-31</h4>
 
 </div>
 
@@ -1527,10 +1527,10 @@ final code to GitHub.</p>
 <h2>Load the libraries</h2>
 <pre class="r"><code>library(&quot;tidyverse&quot;)</code></pre>
 <pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.4     ✔ readr     2.1.4
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
 ## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
 ## ✔ purrr     1.0.2     
 ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
@@ -1892,10 +1892,43 @@ sure to sort your results by weight lowest to highest.</li>
 <li>Let’s make a new variable that is the ratio of height to weight.
 Call this variable <code>height_weight_ratio</code>.</li>
 </ol>
-<pre class="r"><code>#height_weight_ration &lt;- select</code></pre>
+<pre class="r"><code>height_weight_ration &lt;- select(superhero_info, &quot;name&quot;, &quot;height&quot;, &quot;weight&quot;)
+height_weight_ration$ratio &lt;- height_weight_ration$weight/height_weight_ration$height
+height_weight_ration</code></pre>
+<pre><code>## # A tibble: 734 × 4
+##    name          height weight  ratio
+##    &lt;chr&gt;          &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1 A-Bomb           203    441  2.17 
+##  2 Abe Sapien       191     65  0.340
+##  3 Abin Sur         185     90  0.486
+##  4 Abomination      203    441  2.17 
+##  5 Abraxas           NA     NA NA    
+##  6 Absorbing Man    193    122  0.632
+##  7 Adam Monroe       NA     NA NA    
+##  8 Adam Strange     185     88  0.476
+##  9 Agent 13         173     61  0.353
+## 10 Agent Bob        178     81  0.455
+## # ℹ 724 more rows</code></pre>
 <ol start="12" style="list-style-type: decimal">
 <li>Who has the highest height to weight ratio?</li>
 </ol>
+<pre class="r"><code>height_weight_ration %&gt;% 
+  arrange(desc(ratio))</code></pre>
+<pre><code>## # A tibble: 734 × 4
+##    name        height weight ratio
+##    &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1 Giganta       62.5    630 10.1 
+##  2 Utgard-Loki   15.2     58  3.82
+##  3 Darkseid     267      817  3.06
+##  4 Juggernaut   287      855  2.98
+##  5 Red Hulk     213      630  2.96
+##  6 Sasquatch    305      900  2.95
+##  7 Hulk         244      630  2.58
+##  8 Bloodaxe     218      495  2.27
+##  9 Thanos       201      443  2.20
+## 10 A-Bomb       203      441  2.17
+## # ℹ 724 more rows</code></pre>
+<pre class="r"><code>#Giganta</code></pre>
 </div>
 <div id="superhero_powers" class="section level2">
 <h2><code>superhero_powers</code></h2>
@@ -1905,14 +1938,59 @@ frame.</p>
 <li>How many superheros have a combination of agility, stealth,
 super_strength, stamina?</li>
 </ol>
+<pre class="r"><code>superhero_powers %&gt;% 
+  filter(agility==&quot;TRUE&quot;&amp; stealth==&quot;TRUE&quot; &amp; super_strength==&quot;TRUE&quot; &amp; stamina==&quot;TRUE&quot; )</code></pre>
+<pre><code>## # A tibble: 40 × 168
+##    hero_names  agility accelerated_healing lantern_power_ring
+##    &lt;chr&gt;       &lt;lgl&gt;   &lt;lgl&gt;               &lt;lgl&gt;             
+##  1 Alex Mercer TRUE    TRUE                FALSE             
+##  2 Angel       TRUE    TRUE                FALSE             
+##  3 Ant-Man II  TRUE    FALSE               FALSE             
+##  4 Aquaman     TRUE    TRUE                FALSE             
+##  5 Batman      TRUE    FALSE               FALSE             
+##  6 Black Flash TRUE    FALSE               FALSE             
+##  7 Black Manta TRUE    FALSE               FALSE             
+##  8 Brundlefly  TRUE    FALSE               FALSE             
+##  9 Buffy       TRUE    TRUE                FALSE             
+## 10 Cable       TRUE    TRUE                FALSE             
+## # ℹ 30 more rows
+## # ℹ 164 more variables: dimensional_awareness &lt;lgl&gt;, cold_resistance &lt;lgl&gt;,
+## #   durability &lt;lgl&gt;, stealth &lt;lgl&gt;, energy_absorption &lt;lgl&gt;, flight &lt;lgl&gt;,
+## #   danger_sense &lt;lgl&gt;, underwater_breathing &lt;lgl&gt;, marksmanship &lt;lgl&gt;,
+## #   weapons_master &lt;lgl&gt;, power_augmentation &lt;lgl&gt;, animal_attributes &lt;lgl&gt;,
+## #   longevity &lt;lgl&gt;, intelligence &lt;lgl&gt;, super_strength &lt;lgl&gt;,
+## #   cryokinesis &lt;lgl&gt;, telepathy &lt;lgl&gt;, energy_armor &lt;lgl&gt;, …</code></pre>
 </div>
 <div id="your-favorite" class="section level2">
 <h2>Your Favorite</h2>
 <ol start="14" style="list-style-type: decimal">
-<li><p>Pick your favorite superhero and let’s see their powers!</p></li>
-<li><p>Can you find your hero in the superhero_info data? Show their
-info!</p></li>
+<li>Pick your favorite superhero and let’s see their powers!</li>
 </ol>
+<pre class="r"><code>filter(superhero_powers, hero_names==&quot;Spider-Man&quot;)</code></pre>
+<pre><code>## # A tibble: 1 × 168
+##   hero_names agility accelerated_healing lantern_power_ring
+##   &lt;chr&gt;      &lt;lgl&gt;   &lt;lgl&gt;               &lt;lgl&gt;             
+## 1 Spider-Man TRUE    TRUE                FALSE             
+## # ℹ 164 more variables: dimensional_awareness &lt;lgl&gt;, cold_resistance &lt;lgl&gt;,
+## #   durability &lt;lgl&gt;, stealth &lt;lgl&gt;, energy_absorption &lt;lgl&gt;, flight &lt;lgl&gt;,
+## #   danger_sense &lt;lgl&gt;, underwater_breathing &lt;lgl&gt;, marksmanship &lt;lgl&gt;,
+## #   weapons_master &lt;lgl&gt;, power_augmentation &lt;lgl&gt;, animal_attributes &lt;lgl&gt;,
+## #   longevity &lt;lgl&gt;, intelligence &lt;lgl&gt;, super_strength &lt;lgl&gt;,
+## #   cryokinesis &lt;lgl&gt;, telepathy &lt;lgl&gt;, energy_armor &lt;lgl&gt;,
+## #   energy_blasts &lt;lgl&gt;, duplication &lt;lgl&gt;, size_changing &lt;lgl&gt;, …</code></pre>
+<ol start="15" style="list-style-type: decimal">
+<li>Can you find your hero in the superhero_info data? Show their
+info!</li>
+</ol>
+<pre class="r"><code>filter(superhero_info, name==&quot;Spider-Man&quot;)</code></pre>
+<pre><code>## # A tibble: 3 × 10
+##   name   gender eye_color race  hair_color height publisher skin_color alignment
+##   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;    
+## 1 Spide… Male   hazel     Human Brown         178 Marvel C… &lt;NA&gt;       good     
+## 2 Spide… &lt;NA&gt;   red       Human Brown         178 Marvel C… &lt;NA&gt;       good     
+## 3 Spide… Male   brown     Human Black         157 Marvel C… &lt;NA&gt;       good     
+## # ℹ 1 more variable: weight &lt;dbl&gt;</code></pre>
+<pre class="r"><code>#there&#39;s 3 spidermans here, but they don&#39;t show earth number so I can&#39;t find the specific one :/, maybe these people should add that to the list haha </code></pre>
 </div>
 <div id="push-your-final-code-to-github" class="section level2">
 <h2>Push your final code to GitHub!</h2>
