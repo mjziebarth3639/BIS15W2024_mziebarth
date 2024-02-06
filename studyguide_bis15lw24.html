@@ -377,8 +377,8 @@ y &lt;- c(9, 4, 5)</code></pre>
 container. It’s a common way of organizing data</p>
 <p>DEF: A data matrix is a collection of the same type of data elements
 (numberical, character, ect) in rows or columns.</p>
-<p>Other basic funtions include</p>
-<pre class="r"><code>8*9 #Mulitplication 
+<p>Other basic functions include</p>
+<pre class="r"><code>8*9 #Multiplication 
 8/9 #Division 
 8+9 #addition 
 8-9 #subtraction</code></pre>
@@ -402,9 +402,13 @@ is.integer(my_integer)
 use</p>
 <pre class="r"><code>na &lt;- NA
 is.na(na)
-# or use anyna()</code></pre>
+# or use anyNA(data)</code></pre>
 <p>If you want to get rid of any NAs, use</p>
-<pre class="r"><code>mean(x, na.rm=T)</code></pre>
+<pre class="r"><code>#mean(data$variable, na.rm=T) 
+#use na.rm=T in the mean parenthesis</code></pre>
+<p>to find the max and min for a variable</p>
+<pre class="r"><code>#max(data$variable)</code></pre>
+<pre class="r"><code>#min(data$variable)</code></pre>
 <p>A numeric vector looks like</p>
 <pre class="r"><code>vector &lt;- c(10, 20, 30)
 # you can make a sequence by doinc c(1:100) if you want every number between 1 and 100</code></pre>
@@ -527,6 +531,8 @@ columns</p>
 <pre class="r"><code>ncol(newborns)</code></pre>
 <p>the dimensions.</p>
 <pre class="r"><code>dim(newborns)</code></pre>
+<p>the class</p>
+<pre class="r"><code>class(newborns)</code></pre>
 <p>the column names.</p>
 <pre class="r"><code>names(newborns)</code></pre>
 <p>‘heads()’ shows the first n rows of the data frame.</p>
@@ -538,6 +544,14 @@ columns</p>
 <p>’table()’is useful when you have a limited number of categorical
 variables</p>
 <pre class="r"><code>table(newborns$eye_color) </code></pre>
+<pre class="r"><code>newborns &lt;- as.factor(newborns$sex)</code></pre>
+</div>
+<div id="to-change-class-to-factor" class="section level4">
+<h4>TO CHANGE CLASS TO FACTOR</h4>
+<pre class="r"><code>#class_t &lt;- as.factor(homerange$taxon)
+#use for few data point otherwise use the mutate version</code></pre>
+<p>Display levels</p>
+<pre class="r"><code>#levels(class_t)</code></pre>
 </div>
 <div id="extracting-data" class="section level4">
 <h4>Extracting data</h4>
@@ -545,10 +559,11 @@ variables</p>
 rearranging, and summarizing data such that they are focused on a
 question of interest”</p>
 </div>
-<div id="select-allows-you-to-pull-out-columns-of-interest.-it-works-best-with-large-data-sets-as-its-hard-to-see-values." class="section level4">
-<h4>Select: Allows you to pull out columns of interest. It works best
-with large data sets as it’s hard to see values.</h4>
-<p>the basic command is ‘select(data, “name”, “name”, …)’</p>
+<div id="select" class="section level4">
+<h4>Select:</h4>
+<p>Allows you to pull out columns of interest. It works best with large
+data sets as it’s hard to see values.</p>
+<p>The basic command is ‘select(data, “name”, “name”, …)’</p>
 <pre class="r"><code>select(newborns, &quot;length&quot; , &quot;weight&quot;)</code></pre>
 <p>if you want to grab numerous sections us a ‘:’</p>
 <pre class="r"><code>select(newborns, &quot;sex&quot;:&quot;weight&quot;)</code></pre>
@@ -569,7 +584,8 @@ with large data sets as it’s hard to see values.</h4>
 used to pull columns, filter us used to pull specific data within a
 column.</p>
 <p>if you want the data to equal a value use ‘==’</p>
-<pre class="r"><code>filter(newborns, sex==&quot;boy&quot;)</code></pre>
+<pre class="r"><code>filter(newborns, sex==&quot;boy&quot;)
+#remember filter alwasy uses == not =</code></pre>
 <p>if you want a certain numerical value greater or lesser than a
 certain point use ‘&gt;= and &lt;=’</p>
 <pre class="r"><code>filter(newborns, length &lt;= 20)</code></pre>
@@ -589,11 +605,127 @@ variables can’t be true at the same time.</p>
 </div>
 <div id="pipes" class="section level4">
 <h4>Pipes</h4>
+<pre class="r"><code>library(janitor)
+fish &lt;- read_csv(&quot;Gaeta_etal_CLC_data.csv&quot;)%&gt;% 
+  clean_names()</code></pre>
+<p>Another and factor way to clean names, make sure janitor is already
+installed</p>
+<pre class="r"><code>fish &lt;- janitor::clean_names(fish)</code></pre>
 <p>Use these when you want to combine specified data
 (shift+command+m)</p>
 <pre class="r"><code>newborns %&gt;% 
   select(&quot;sex&quot;, &quot;weight&quot;) %&gt;% 
   filter(weight &gt;= 7 &amp; sex != &quot;boy&quot;)</code></pre>
+<p>The arrange function allows you to sort the funtion, just arrange is
+low to high, use arrange(desc()) to arrange lower to higher</p>
+<pre class="r"><code>fish %&gt;% 
+  select(lakeid, scalelength) %&gt;% 
+  arrange(scalelength)</code></pre>
+<pre class="r"><code>fish %&gt;% 
+  select(lakeid, scalelength) %&gt;% 
+  arrange(desc(scalelength))</code></pre>
+</div>
+<div id="mutate" class="section level4">
+<h4>Mutate</h4>
+<p>Mutate allows us to create a new column from existing columns in a
+data frame.</p>
+<p>Convert the length variable and create a new variable called
+length_tenx.</p>
+<pre class="r"><code>fish %&gt;% 
+  mutate(length_mm = length*10) %&gt;% 
+  select(fish_id, length, length_mm)
+#this creates a new column with affected data of a preexisting data. </code></pre>
+<p>another way to use mutate is to change all CHARACTERS TO FACTORS</p>
+<pre class="r"><code>fish %&gt;%
+  mutate_if(is.character, factor)
+#this changes a character to a factor, when multiple characters</code></pre>
+<p>OR for individual cases</p>
+<pre class="r"><code>#fisheries$country &lt;- as.factor(fisheries$country) %&gt;% 
+  #fisheries$isscaap_group_number &lt;- as.factor(fisheries$isscaap_group_number)
+  #fisheries$asfis_species_number &lt;- as.factor(fisheries$asfis_species_number)
+  #fisheries$fao_major_fishing_area &lt;- as.factor(fisheries$fao_major_fishing_area)</code></pre>
+<p>This changes all values within the dataset to lowercase letters</p>
+<pre class="r"><code>fish%&gt;%
+  mutate_all(tolower)</code></pre>
+<p>Use the ‘if_else’ function to make the any nonvalue (-999, NA, ect)
+into Nan which mean not a number which you can us to tabulate means and
+such easier</p>
+<pre class="r"><code>mammals %&gt;% 
+  select(genus, species, newborn) %&gt;%
+  mutate(newborn_new = ifelse(newborn == -999.00, NA, newborn))%&gt;%
+  arrange(newborn)</code></pre>
+<p>Tabyl is like table but more in depth</p>
+<pre class="r"><code>tabyl(fish, lakeid)</code></pre>
+</div>
+<div id="summarize" class="section level4">
+<h4>Summarize</h4>
+<p>load package skimr</p>
+<pre class="r"><code>library(skimr)</code></pre>
+<p>Like summary but cleaner</p>
+<pre class="r"><code>skim(fish)</code></pre>
+<p>To make a histogram</p>
+<pre class="r"><code>hist(mammals$litters_year)</code></pre>
+<p>summarize makes things cleaner, use it for mean, max, min and sd of
+filtered variables.</p>
+<pre class="r"><code>fish %&gt;% 
+  filter(scalelength&lt;=3) %&gt;% 
+  summarize(mean_mass=mean(length),
+            max_mass=max(length),
+            min_mass=min(length),
+            sd_mean=sd(length),
+            total=n()) #total=n() shows the total number of objects used </code></pre>
+<p>if you want to find the number of distinct observations, sometimes
+there are repeated values</p>
+<pre class="r"><code>mammals %&gt;% 
+  filter(mass &gt; 100) %&gt;% 
+  summarize(n_genera=n_distinct(genus)) #n_genera is the name </code></pre>
+</div>
+<div id="group_by" class="section level4">
+<h4>group_by</h4>
+<p>group_by is used with summary, groups by categorical variables</p>
+<pre class="r"><code>#ASK ABOUT THIS
+mammals %&gt;% 
+  group_by(order) %&gt;% 
+  mutate(mass_new = ifelse(mass == -999.00, NA, mass))%&gt;% 
+  summarize(mean_mass=mean(mass_new),
+            max_mass=max(mass_new),
+            min_mass=min(mass_new),
+            sd_mass=sd(mass_new),
+            #sum_mass=sum(mass_new), just as an exapmle of how to use sum.
+            total=n())</code></pre>
+</div>
+<div id="counts" class="section level4">
+<h4>counts</h4>
+<p>Tells you how many observations in each column (you can also use
+tabyl for). Does the same thing as group_by + summarize</p>
+<pre class="r"><code>fish %&gt;% 
+  count(lakeid, sort = T) #sort=T sorts the column in descending order</code></pre>
+</div>
+<div id="across" class="section level4">
+<h4>across</h4>
+<p>A cleaner version of finding the distinct number of observations,
+mean, max, ect. across multiple groups with summarize</p>
+<pre class="r"><code>mammals %&gt;%
+  summarize(across(c(species, order, family, gestation), n_distinct))</code></pre>
+<p>You can use commands such as ‘contains’ which asks if a variable
+contains that input to use them</p>
+<pre class="r"><code>mammals %&gt;% 
+  group_by(genus) %&gt;% 
+  mutate(litter_size_new = ifelse(litter_size == -999.00, NA, litter_size))%&gt;% #you have to do this for each line 
+  mutate(litters_year_new = ifelse(litters_year == -999.00, NA, litters_year))%&gt;% 
+  summarize(across(contains(&quot;_new&quot;), mean, na.rm=T)) 
+                   #\(x) mean(x, na.rm = TRUE))) #use this to correct the error, not always necessary</code></pre>
+<p>Or to pull out specific characters</p>
+<pre class="r"><code>mammals %&gt;% 
+  summarize(across(where(is.numeric), mean, na.rm=T)) %&gt;% 
+  select(!weaning) #excluding the numeric variable weaning</code></pre>
+</div>
+<div id="use-hw5-and-midterm-answerkey-for-big-refferences" class="section level3">
+<h3>USE HW5 AND MIDTERM ANSWERKEY FOR BIG REFFERENCES</h3>
+</div>
+<div id="think-criticaly-about-the-questions-before-jumping-in-you-could-miss-something-important" class="section level3">
+<h3>THINK CRITICALY ABOUT THE QUESTIONS BEFORE JUMPING IN, YOU COULD
+MISS SOMETHING IMPORTANT</h3>
 </div>
 
 

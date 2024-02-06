@@ -44,9 +44,9 @@ DEF: A vector is an ordered list/collection of variables in a container. It’s 
 
 DEF: A data matrix is a collection of the same type of data elements (numberical, character, ect) in rows or columns.
 
-Other basic funtions include 
+Other basic functions include 
 ```{r}
-8*9 #Mulitplication 
+8*9 #Multiplication 
 8/9 #Division 
 8+9 #addition 
 8-9 #subtraction
@@ -82,12 +82,23 @@ If there is any NA's or missing data that messes up your code, use
 ```{r}
 na <- NA
 is.na(na)
-# or use anyna()
+# or use anyNA(data)
 ```
 If you want to get rid of any NAs, use 
 ```{r}
-mean(x, na.rm=T)
+#mean(data$variable, na.rm=T) 
+#use na.rm=T in the mean parenthesis
 ```
+
+to find the max and min for a variable
+```{r}
+#max(data$variable)
+```
+```{r}
+#min(data$variable)
+```
+
+
 
 A numeric vector looks like 
 ```{r}
@@ -269,6 +280,11 @@ the dimensions.
 dim(newborns)
 ```
 
+the class
+```{r}
+class(newborns)
+```
+
 the column names.
 ```{r}
 names(newborns)
@@ -291,13 +307,30 @@ tail(newborns)
 table(newborns$eye_color) 
 ```
 
+```{r}
+newborns <- as.factor(newborns$sex)
+```
+#### TO CHANGE CLASS TO FACTOR 
+```{r}
+#class_t <- as.factor(homerange$taxon)
+#use for few data point otherwise use the mutate version
+```
+
+Display levels
+```{r}
+#levels(class_t)
+```
+
+
+
 #### Extracting data
 
 DEF: dplyr: "dplyr is used to transform data frames by extracting, rearranging, and summarizing data such that they are focused on a question of interest"
 
-#### Select: Allows you to pull out columns of interest. It works best with large data sets as it's hard to see values. 
+#### Select: 
+Allows you to pull out columns of interest. It works best with large data sets as it's hard to see values. 
 
-the basic command is 'select(data, "name", "name", ...)'
+The basic command is 'select(data, "name", "name", ...)'
 ```{r}
 select(newborns, "length" , "weight")
 ```
@@ -341,6 +374,7 @@ Allows you to pull out certain values of interest. while select us used to pull 
 if you want the data to equal a value use '=='
 ```{r}
 filter(newborns, sex=="boy")
+#remember filter alwasy uses == not =
 ```
 
 if you want a certain numerical value greater or lesser than a certain point use '>= and <='
@@ -378,6 +412,17 @@ filter(newborns, eye_color=="brown" | weight <= 8)
 
 #### Pipes
 
+```{r}
+library(janitor)
+fish <- read_csv("Gaeta_etal_CLC_data.csv")%>% 
+  clean_names()
+```
+Another and factor way to clean names, make sure janitor is already installed
+```{r}
+fish <- janitor::clean_names(fish)
+```
+
+
 Use these when you want to combine specified data (shift+command+m)
 ```{r}
 newborns %>% 
@@ -385,7 +430,145 @@ newborns %>%
   filter(weight >= 7 & sex != "boy")
 ```
 
+The arrange function allows you to sort the funtion, just arrange is low to high, use arrange(desc()) to arrange lower to higher
+```{r}
+fish %>% 
+  select(lakeid, scalelength) %>% 
+  arrange(scalelength)
+```
 
+```{r}
+fish %>% 
+  select(lakeid, scalelength) %>% 
+  arrange(desc(scalelength))
+```
 
+#### Mutate
 
+Mutate allows us to create a new column from existing columns in a data frame.
+
+Convert the length variable and create a new variable called length_tenx. 
+```{r}
+fish %>% 
+  mutate(length_mm = length*10) %>% 
+  select(fish_id, length, length_mm)
+#this creates a new column with affected data of a preexisting data. 
+```
+another way to use mutate is to change all CHARACTERS TO FACTORS
+```{r}
+fish %>%
+  mutate_if(is.character, factor)
+#this changes a character to a factor, when multiple characters
+```
+OR for individual cases 
+```{r}
+#fisheries$country <- as.factor(fisheries$country) %>% 
+  #fisheries$isscaap_group_number <- as.factor(fisheries$isscaap_group_number)
+  #fisheries$asfis_species_number <- as.factor(fisheries$asfis_species_number)
+  #fisheries$fao_major_fishing_area <- as.factor(fisheries$fao_major_fishing_area)
+```
+
+This changes all values within the dataset to lowercase letters
+```{r}
+fish%>%
+  mutate_all(tolower)
+```
+
+```{r, echo=FALSE}
+mammals <- read_csv("mammal_lifehistories_v2.csv", na = c("-999.00")) %>% # the na=c("") converts evrything to na when loading in in case
+  clean_names()
+```
+
+Use the 'if_else' function to make the any nonvalue (-999, NA, ect) into Nan which mean not a number which you can us to tabulate means and such easier
+```{r}
+mammals %>% 
+  select(genus, species, newborn) %>%
+  mutate(newborn_new = ifelse(newborn == -999.00, NA, newborn))%>%
+  arrange(newborn)
+```
+
+Tabyl is like table but more in depth 
+```{r}
+tabyl(fish, lakeid)
+```
+
+#### Summarize
+
+load package skimr
+```{r}
+library(skimr)
+```
+
+Like summary but cleaner
+```{r}
+skim(fish)
+```
+
+To make a histogram
+```{r}
+hist(mammals$litters_year)
+```
+summarize makes things cleaner, use it for mean, max, min and sd of filtered variables.
+```{r, echo=TRUE}
+fish %>% 
+  filter(scalelength<=3) %>% 
+  summarize(mean_mass=mean(length),
+            max_mass=max(length),
+            min_mass=min(length),
+            sd_mean=sd(length),
+            total=n()) #total=n() shows the total number of objects used 
+```
+if you want to find the number of distinct observations, sometimes there are repeated values
+```{r}
+mammals %>% 
+  filter(mass > 100) %>% 
+  summarize(n_genera=n_distinct(genus)) #n_genera is the name 
+```
+
+#### group_by
+group_by is used with summary, groups by categorical variables 
+```{r}
+#ASK ABOUT THIS
+mammals %>% 
+  group_by(order) %>% 
+  mutate(mass_new = ifelse(mass == -999.00, NA, mass))%>% 
+  summarize(mean_mass=mean(mass_new),
+            max_mass=max(mass_new),
+            min_mass=min(mass_new),
+            sd_mass=sd(mass_new),
+            #sum_mass=sum(mass_new), just as an exapmle of how to use sum.
+            total=n())
+```
+
+#### counts 
+Tells you how many observations in each column (you can also use tabyl for). Does the same thing as group_by + summarize
+```{r}
+fish %>% 
+  count(lakeid, sort = T) #sort=T sorts the column in descending order
+```
+
+#### across
+A cleaner version of finding the distinct number of observations, mean, max, ect.  across multiple groups with summarize
+```{r}
+mammals %>%
+  summarize(across(c(species, order, family, gestation), n_distinct))
+```
+You can use commands such as 'contains' which asks if a variable contains that input to use them
+```{r}
+mammals %>% 
+  group_by(genus) %>% 
+  mutate(litter_size_new = ifelse(litter_size == -999.00, NA, litter_size))%>% #you have to do this for each line 
+  mutate(litters_year_new = ifelse(litters_year == -999.00, NA, litters_year))%>% 
+  summarize(across(contains("_new"), mean, na.rm=T)) 
+                   #\(x) mean(x, na.rm = TRUE))) #use this to correct the error, not always necessary
+```
+Or to pull out specific characters 
+```{r}
+mammals %>% 
+  summarize(across(where(is.numeric), mean, na.rm=T)) %>% 
+  select(!weaning) #excluding the numeric variable weaning
+```
+
+### USE HW5 AND MIDTERM ANSWERKEY FOR BIG REFFERENCES
+### THINK CRITICALY ABOUT THE QUESTIONS BEFORE JUMPING IN, YOU COULD MISS SOMETHING IMPORTANT
 
