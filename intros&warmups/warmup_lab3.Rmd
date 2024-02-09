@@ -1,0 +1,57 @@
+---
+title: "warmup lab 3"
+output: html_document
+date: "2024-01-18"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### 1. Plant Height Vector
+```{r}
+plant_height <- c(30.7 , 37.6 , 28.4 , NA , 33.2)
+```
+
+### 2. Plant Weiht Vector
+```{r}
+plant_weight <- c(4 , 5.2 , 3.7 , NA , 4.6)
+```
+
+### 3. Labels for Matrix 
+```{r}
+samples <- c("plant1" , "plant2" , "plant3" , "plant4" , "plant5")
+measured <- c("Height" , "Weight")
+```
+
+### 4. Comine Data for Hieght and Weight
+```{r}
+plant_exp <- c(plant_height , plant_weight)
+```
+
+### 5. Build Data Matrix
+```{r}
+plant_exp.matrix <- matrix(plant_exp, nrow = 5 , byrow = F)
+plant_exp.matrix
+```
+
+### 6. Label Matrix 
+```{r}
+colnames(plant_exp.matrix) <- measured
+rownames(plant_exp.matrix) <- samples
+```
+
+### 7. Calculate Means of the Columns  
+```{r}
+plant_means <- colMeans(plant_exp.matrix, na.rm = F)
+```
+
+### 8. Add this row
+```{r}
+plant_exp.martix_final <- rbind(plant_exp.matrix, plant_means)
+```
+
+### 9. Print the matix
+```{r}
+plant_exp.martix_final
+```
