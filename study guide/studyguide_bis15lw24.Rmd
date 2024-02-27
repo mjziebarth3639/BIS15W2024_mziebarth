@@ -2,7 +2,13 @@
 title: "studyguide_bis15lw24"
 author: "Maya Ziebarth"
 date: "2024-01-25"
-output: html_document
+output:
+  html_document:
+    theme: spacelab
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
 ---
 
 ```{r setup, include=FALSE, EVAL = FALSE}
@@ -10,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-#### Basics 
+### Basics 
 
 Always load tidyverse
 ```{r}
@@ -94,6 +100,7 @@ to find the max and min for a variable
 ```{r}
 #max(data$variable)
 ```
+
 ```{r}
 #min(data$variable)
 ```
@@ -118,7 +125,7 @@ character[3]
 ```
 
 
-#### How to create a data.matrix
+### How to create a data.matrix
 these values were given, the movie names are variables/characters and the numbers are values/numeric 
 ```{r}
 Philosophers_Stone <- c(317.5, 657.1)
@@ -170,7 +177,7 @@ hp_matrix
 ```
 
 
-#### Some ways to use a data matirx
+### Some ways to use a data matirx
 To add all the rows together 
 ```{r}
 rowsums <- rowSums(hp_matrix)
@@ -191,7 +198,7 @@ mean(non_us_earnings)
 ```
 
 
-#### How to make and use data.frame
+### How to make and use data.frame
 DEF: "The data frame is the most common way to organize data within R. You can think of a data frame as similar to a spreadsheet. A data frame can store data of many different classes."
 
 Data frames vs. Data matrix 
@@ -233,7 +240,7 @@ newborns
 ```
 
 
-#### .CSV
+### .CSV
 To write and save data as a .csv file, use
 ```{r}
 write.csv(newborns, "newborns_data.csv", row.names = FALSE)
@@ -246,7 +253,7 @@ newborns <- read_csv("newborns_data.csv")
 #Usually there will be a "data/..." before because the data will be given
 ```
 
-#### Summary Fuctions 
+### Summary Fuctions 
 
 These are basic functions that show specific information of the data
 
@@ -310,7 +317,8 @@ table(newborns$eye_color)
 ```{r}
 newborns <- as.factor(newborns$sex)
 ```
-#### TO CHANGE CLASS TO FACTOR 
+
+### TO CHANGE CLASS TO FACTOR 
 ```{r}
 #class_t <- as.factor(homerange$taxon)
 #use for few data point otherwise use the mutate version
@@ -323,11 +331,11 @@ Display levels
 
 
 
-#### Extracting data
+### Extracting data
 
 DEF: dplyr: "dplyr is used to transform data frames by extracting, rearranging, and summarizing data such that they are focused on a question of interest"
 
-#### Select: 
+### Select: 
 Allows you to pull out columns of interest. It works best with large data sets as it's hard to see values. 
 
 The basic command is 'select(data, "name", "name", ...)'
@@ -368,7 +376,7 @@ select_if(newborns, is.numeric)
 
 
 
-#### Filter: 
+### Filter: 
 Allows you to pull out certain values of interest. while select us used to pull columns, filter us used to pull specific data within a column. 
 
 if you want the data to equal a value use '=='
@@ -410,7 +418,7 @@ filter(newborns, eye_color=="brown" | weight <= 8)
 
 
 
-#### Pipes
+### Pipes
 
 ```{r}
 library(janitor)
@@ -443,7 +451,7 @@ fish %>%
   arrange(desc(scalelength))
 ```
 
-#### Mutate
+### Mutate
 
 Mutate allows us to create a new column from existing columns in a data frame.
 
@@ -492,7 +500,7 @@ Tabyl is like table but more in depth
 tabyl(fish, lakeid)
 ```
 
-#### Summarize
+### Summarize
 
 load package skimr
 ```{r}
@@ -525,7 +533,7 @@ mammals %>%
   summarize(n_genera=n_distinct(genus)) #n_genera is the name 
 ```
 
-#### group_by
+### group_by
 group_by is used with summary, groups by categorical variables 
 ```{r}
 #ASK ABOUT THIS
@@ -540,14 +548,14 @@ mammals %>%
             total=n())
 ```
 
-#### counts 
+### counts 
 Tells you how many observations in each column (you can also use tabyl for). Does the same thing as group_by + summarize
 ```{r}
 fish %>% 
   count(lakeid, sort = T) #sort=T sorts the column in descending order
 ```
 
-#### across
+### across
 A cleaner version of finding the distinct number of observations, mean, max, ect.  across multiple groups with summarize
 ```{r}
 mammals %>%
@@ -571,4 +579,310 @@ mammals %>%
 
 ### USE HW5 AND MIDTERM ANSWERKEY FOR BIG REFFERENCES
 ### THINK CRITICALY ABOUT THE QUESTIONS BEFORE JUMPING IN, YOU COULD MISS SOMETHING IMPORTANT
+
+
+###  More about NAs
+
+load the library, this allows you to pull and change data with irregular NAs
+```{r}
+library("naniar")
+```
+
+'miss_var_summary' gives the number of missing variables only when the variable says "NA"
+```{r}
+miss_var_summary(mammals)
+```
+
+reload the data and input na=c() to covert these variables into NAs
+```{r}
+mammals <- read_csv("mammal_lifehistories_v2.csv", na = c("-999.00", "-999"))
+```
+
+OR you can use this command with a pipe and rerun the missing vraible
+```{r}
+mammals_tidy <- mammals %>% 
+  replace_with_na_all(condition = ~.x == -999.00) 
+miss_var_summary(mammals_tidy)
+```
+if each column has a different variable input for na use
+```{r}
+#life_history %>%
+ # replace_with_na(replace = list(newborn = "not measured", 
+                               #  weaning= -999, 
+                               #  wean_mass= -999, 
+                              #    afr= -999, 
+                              #   max_life= 0, 
+                               #  litter_size= -999, 
+                                # gestation= -999, 
+                               #  mass= -999)) 
+```
+
+
+### Pivoting
+```{r}
+heartrate <- read_csv("data/heartrate.csv")
+billboard <- read_csv("data/billboard.csv")
+gene_exp <- read_csv("data/gene_exp.csv")
+heartrate2 <- read_csv("data/heartrate2.csv")
+tb_data <- read_csv("data/tb_data.csv")
+```
+
+
+pivot_longer is used when the data is in a column and should be elongated and placed into one column 
+```{r}
+heartrate %>% 
+  pivot_longer(-patient, #patient will not move
+               names_to = "drug", #make a new column called "drug"
+               values_to="heartrate",#values moved to a new column called
+               values_drop_na = TRUE) #this will drop the NA's
+```
+```{r}
+billboard %>% 
+   pivot_longer(
+   cols = starts_with("wk"), #columns that start with "wk"
+   names_to = "week",
+  names_prefix = "wk",
+   values_to = "rank",
+  values_drop_na = TRUE)
+```
+
+
+pivot_wider is used when the data in one column but should be it's own columns with the values form something else 
+```{r}
+tb_data %>% 
+  pivot_wider(names_from = "key", #the observations under key will become new columns
+              values_from = "value") #the values under value will be moved to the new columns
+```
+
+if you want to separate a column name with compounded data, use 'separate' 
+```{r}
+heartrate3 <- heartrate2 %>% 
+  separate(patient, into=c("patient", "sex"), sep="_") %>% 
+  pivot_longer(-c(patient, sex),
+               names_to = "drug",
+               values_to = "heartrate")
+```
+
+
+### Specifications
+'slice_max' condenses repeating variables like n_distinct but gives the values not a single number. Goes after arrange
+```{r}
+mammals %>% 
+  group_by(family) %>% 
+  summarize(mean_newborn=mean(newborn)) %>% 
+  arrange(desc(mean_newborn)) %>% 
+  slice_max(mean_newborn, n=5)
+```
+'top_n' gives the top value gives the to number based on a character value from a select of 2, best with plots
+```{r}
+mammals%>% 
+  select(species, mass) %>% 
+  top_n(-15, mass)
+```
+
+
+
+### Plots 
+
+to make a plot start by piping into 'ggplot()', wrapping in 'aes' and use '+' to add a layer, then use 'goem_plottype()', depending on the plot you want. 
+
+eliminates the use of scientific notation
+```{r}
+homerange <- read_csv("data_full/Tamburelloetal_HomeRangeDatabase.csv")
+options(scipen=999) #cancels the use of scientific notation for the session
+```
+
+
+Scatterplot
+```{r, EVAL = TRUE}
+homerange %>% 
+  ggplot(aes(x=log10.mass, y=log10.hra))+
+  geom_point()
+```
+
+to avoid extraneous data use goem_jitter, which is teh same as scatter but more precise in large data sets
+```{r, EVAL = TRUE}
+homerange %>% 
+  ggplot(aes(x=log10.mass, y=log10.hra))+
+  geom_jitter(na.rm=T)
+```
+
+to add a best fit line is 'geom_smooth'
+```{r}
+homerange %>% 
+  ggplot(aes(x=log10.mass, y=log10.hra))+
+  geom_jitter(na.rm=T)+
+  geom_smooth(method=lm, se=F) #se=F says that standard error is not shown.
+```
+
+
+Boxplot
+```{r, EVAL = TRUE}
+homerange %>% 
+  ggplot(aes(x=order, y=log10.hra))+
+  geom_boxplot()+
+  coord_flip() # flips the x and y to make it look cleaner
+```
+
+
+Bar Plots: only need x axis, it automatically shows count
+```{r, EVAL = TRUE}
+homerange %>% 
+  ggplot(aes(x=order))+
+  geom_bar()
+```
+
+Columns: used whne you use 'count' first
+```{r, EVAL = TRUE}
+homerange %>% 
+  count(order, sort=T) %>% 
+  ggplot(aes(x=order, y=n))+
+  geom_col()
+```
+
+Histogram
+```{r, EVAL = TRUE}
+homerange %>% 
+  ggplot(aes(x = log10.mass)) +
+  geom_histogram(bins = 20)+ #we can adjust the number of bins with the bins argument
+  labs(title = "Distribution of Body Mass")
+```
+
+Desnity plots
+```{r, EVAL = TRUE}
+homerange %>% 
+  ggplot(aes(x = log10.mass)) +
+  geom_density()
+```
+
+Histogram and Desnity 
+```{r, EVAL = TRUE}
+homerange %>% 
+  ggplot(aes(x=log10.mass)) +
+  geom_histogram(aes(y = after_stat(density)))+
+  geom_density()
+```
+
+
+Faceting: creates multiple graphs for differnt groups
+```{r, EVAL = TRUE}
+homerange %>% 
+  ggplot(aes(x=log10.mass))+
+  geom_density(fill="steelblue", color="black", alpha=0.6, na.rm=T)+
+  facet_wrap(~taxon)
+```
+onother exapmle of wrap
+```{r, EVAL = TRUE}
+homerange %>% 
+  ggplot(aes(x=taxon, y=log10.mass))+
+  geom_boxplot()+
+  facet_wrap(~trophic.guild)+
+  theme(axis.text.x = element_text(angle = 60, hjust=1))
+```
+
+you can use facet_grid for more specificity, rows~columns
+```{r, EVAL = TRUE}
+homerange %>% 
+  ggplot(aes(x=taxon, y=log10.mass))+
+  geom_boxplot()+
+  facet_grid(trophic.guild~thermoregulation)+
+  theme(axis.text.x = element_text(angle = 60, hjust=1))
+```
+
+
+### Fun with Graphs 
+to add color use fill for bars and col, color for scatter and jitter. Fill with a character variable 
+```{r, EVAL = TRUE}
+homerange %>% 
+  ggplot(aes(x=order, fill=primarymethod))+
+  geom_bar(position = "dodge", na.rm=T) #moves the stacks to side by side
+```
+
+```{r, EVAL = TRUE}
+homerange %>% 
+  ggplot(aes(x=log10.mass, y=log10.hra, color=primarymethod))+
+  geom_jitter(na.rm=T)
+```
+
+titles and looks
+
+'labs()' is the command which labels the title & x and y axis
+```{r, EVAL = TRUE}
+homerange %>% 
+  ggplot(aes(x=log10.mass, y=log10.hra))+
+  geom_jitter(na.rm=T) +
+ labs(title="Homerange Mass vs HRA", #adds a title
+       x="Mass",
+       y="HRA")+
+  theme(plot.title=element_text(size=rel(1.75), hjust = 0.5)) # rel is title size relative ot the graph, hjust is the title position (center)
+```
+'theme_-----()' will make teh graph have a tidy look. I like classic or light, they are the cleanist
+```{r}
+homerange %>% 
+  ggplot(aes(x=log10.mass, y=log10.hra, color=primarymethod))+
+  geom_jitter(na.rm=T)+
+  theme_classic()
+```
+
+
+
+scale_x_discrete orders the variables on the x axis when they're character variables. 
+```{r, EVAL = TRUE}
+homerange %>% 
+  count(taxon) %>% 
+  ggplot(aes(x=taxon, y=n))+
+  geom_col(alpha=0.8, fill="lightblue", color="black", na.rm=T) +
+ labs(title="Number of Observations per Taxon",
+       x="Taxon Name",
+       y="# of Observations")+
+  theme(plot.title=element_text(size=rel(1.75), hjust = 0.5)) +
+  scale_x_discrete(limits=c("mammals", "birds", "marine fishes", "snakes", "turtles", "river fishes", "tortoises", "lizards", "lake fishes")) +
+  theme_classic()
+```
+
+Color pallets 
+```{r}
+library(RColorBrewer)
+library(paletteer)
+library(ggthemes)
+```
+
+use scale_fill_brewer (for fills) and scale_colour_brewer (for points) for more palettes respecitvly. 
+```{r, EVAL = TRUE}
+homerange %>%
+  ggplot(aes(x=taxon, fill=trophic.guild))+
+  geom_bar(na.rm=T, position="dodge") +
+  scale_fill_brewer(palette = "PuBuGn")+
+  theme(legend.position = "bottom",
+        axis.text.x = element_text(angle = 60, hjust=1))+
+  labs(title = "Observations by Taxon in Homerange Data",
+       x = NULL,
+       y= "n",
+       fill= "Trophic Guild")
+```
+you can make a frame called 'my_palette' to store a preselected color palette. you have to have a pallete that has enough colors for your variables 
+```{r}
+colors <- paletteer::palettes_d_names #shows palettes
+my_palette <- paletteer_d("ggsci::nrc_npg") #store your palette,
+```
+
+
+```{r, EVAL = TRUE}
+homerange %>%
+  ggplot(aes(x=taxon, fill=trophic.guild))+
+  geom_bar(na.rm=T, position="dodge") +
+  scale_fill_manual(values=my_palette)+
+  theme(legend.position = "bottom",
+        axis.text.x = element_text(angle = 60, hjust=1))+
+  labs(title = "Observations by Taxon in Homerange Data",
+       x = NULL,
+       y= "n",
+       fill= "Trophic Guild")
+```
+
+
+### ALWAYS ADD FUN THINGS LIKE TITLES AND COLORS TO GRAPHS IN TESTS
+
+
+
 
