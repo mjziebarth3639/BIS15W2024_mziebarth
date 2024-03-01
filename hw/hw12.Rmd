@@ -32,6 +32,11 @@ We will use two separate data sets for this homework.
 grizzly <- read_csv("data/bear-sightings.csv") %>% clean_names()
 ```
 
+```{r}
+register_stadiamaps("e2e27629-aa01-40d7-9f7b-694ccb8febd1", write = FALSE)
+```
+
+
 2. The second data set is from Brandell, Ellen E (2021), Serological dataset and R code for: Patterns and processes of pathogen exposure in gray wolves across North America, Dryad, [Dataset](https://doi.org/10.5061/dryad.5hqbzkh51).  
 ```{r}
 wolves <- read_csv("data/wolves_data/wolves_dataset.csv") %>% clean_names()
@@ -48,55 +53,83 @@ summary(grizzly)
 ```{r}
 lat <- c(55.02, 70.37) 
 long <- c(-166.2, -131.3)
+bbox <- make_bbox(long, lat, f=0.03)
 ```
 
 
 3. Load a map from `stamen` in a terrain style projection and display the map. 
 ```{r}
-
+map1 <- get_stadiamap(bbox, maptype = "stamen_terrain", zoom=5)
 ```
 
 
 4. Build a final map that overlays the recorded observations of grizzly bears in Alaska.  
 ```{r}
-
+ggmap(map1)
 ```
 
 Let's switch to the wolves data. Brandell, Ellen E (2021), Serological dataset and R code for: Patterns and processes of pathogen exposure in gray wolves across North America, Dryad, [Dataset](https://doi.org/10.5061/dryad.5hqbzkh51).  
 
 5. Load the data and evaluate its structure.  
 ```{r}
-
+glimpse(wolves)
 ```
 
 
-6. How many distinct wolf populations are included in this study? Mae a new object that restricts the data to the wolf populations in the lower 48 US states.  
+6. How many distinct wolf populations are included in this study? Make a new object that restricts the data to the wolf populations in the lower 48 US states.  
 ```{r}
-
+wolves %>% 
+  select(pop) %>% 
+  n_distinct
 ```
 
+```{r}
+wolves %>% count(pop)
+```
+
+
+```{r}
+wolves_48 <- wolves %>% 
+  filter(pop=="YNP" | pop=="MT" | pop=="GTNP" | pop=="SNF" | pop=="MI")
+```
+
+```{r}
+wolves_48 %>% count(pop)
+```
+
+ 
 
 7. Use the range of the latitude and longitude to build an appropriate bounding box for your map. 
 ```{r}
+wolves_48 %>% 
+  select(pop, lat, long) %>% 
+  summary()
+```
 
+```{r}
+lat2 <- c(43.82, 47.75)
+long2 <- c(-110.99, -86.82 ) 
+bbox2 <- make_bbox(long2, lat2, f=0.03)
 ```
 
 
 8.  Load a map from `stamen` in a `terrain-lines` projection and display the map.  
 ```{r}
-
+map2 <- get_stadiamap(bbox2, maptype = "stamen_terrain", zoom=7)
 ```
 
 
 9. Build a final map that overlays the recorded observations of wolves in the lower 48 states.  
 ```{r}
-
+ggmap(map2)
 ```
 
 
 10. Use the map from #9 above, but add some aesthetics. Try to `fill` and `color` by population.  
 ```{r}
-
+ggmap(map2) + 
+  geom_point(data = wolves_48, aes(long, lat, color=pop), size=3) +
+  labs(x= "Longitude", y= "Latitude", title="Wolf Pack Locations in the Lower 48 US States")
 ```
 
 
