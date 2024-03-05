@@ -32,9 +32,6 @@ We will use two separate data sets for this homework.
 grizzly <- read_csv("data/bear-sightings.csv") %>% clean_names()
 ```
 
-```{r}
-register_stadiamaps("e2e27629-aa01-40d7-9f7b-694ccb8febd1", write = FALSE)
-```
 
 
 2. The second data set is from Brandell, Ellen E (2021), Serological dataset and R code for: Patterns and processes of pathogen exposure in gray wolves across North America, Dryad, [Dataset](https://doi.org/10.5061/dryad.5hqbzkh51).  
