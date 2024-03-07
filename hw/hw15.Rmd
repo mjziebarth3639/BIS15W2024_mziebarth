@@ -1,6 +1,6 @@
 ---
 title: "BIS15L_AI_hmwk"
-author: "Your Name"
+author: "Maya Ziebarth"
 date: "`r Sys.Date()`"
 output: html_document
 ---
@@ -24,90 +24,93 @@ library(dplyr)
 ```
 
 
-1.
+1. load in the data 'blood_count_dataset.csv'
 ```{r}
-blood_count <- read_csv("data/blood_count.csv")
+blood_count <- read_csv("data/blood_count_dataset.csv") %>% clean_names()
 ```
 
-2. 
+2. Get an idea of what the data looks like
 ```{r}
-glmpse(blood_count)
-
+glimpse(blood_count)
 ```
 
-3. 
+3. Find the maximum, minimum, and mean of the red bloods by gender
 ```{r}
 blood_count %>% 
   group_by(gender) %>% 
-  summarize(min=min(red_blood_cells)
-            mean=maen(red_blood_cells),
-            max=max(red_blood_cells)
+  summarize(min=min(red_blood_cells), 
+            mean=mean(red_blood_cells), 
+            max=max(red_blood_cells)) 
 ```
 
 
-4. 
+4. Filter the data to only include males in the columns 3 through 9, and then calculate the column means for those columns.
 ```{r}
 options(scipen = 999, digits = 2)
 
 blood_count %>% 
-  filter(Gender = "male") %>%
-  select[3:9] %>%
-  colMeans(na.rm = TRUE)
-
+  filter(gender == "Male") %>% 
+  select(3:9) %>% 
+  summarize_all(mean, na.rm = TRUE) 
 ```
 
-5. 
+5. Filter the data to only include males in the columns 3 through 9, and then calculate the column means for those columns.
 ```{r}
-bloood_count %>% 
-  filter(Gender = "Female") />%
-  select[3:9] %>%
-  colMeans(na.rm = T)
-```
-
-
-6. 
-```{r}
-
 blood_count %>%
-  pivot_wider(cols = [3:9], names_to = "Test", values_to = "Values") %>%
-  ggplot(aes(x = Gender, y = Values, fill = Gender)) +
+  filter(gender == "Female") %>%
+  select(3:9) %>%
+  summarize_all(mean, na.rm = TRUE)
+```
+
+
+6. Make a box plot of gender by the blood count tests
+```{r}
+blood_count %>%
+  pivot_longer(cols = (3:9), names_to= "test", values_to = "values") %>%
+  ggplot(aes(x = gender, y = values, fill = gender)) +
   geom_boxplot() +
-  facet(~ Test, scales = "free") 
+  facet_wrap(~test, scales = "free") 
   labs(title = "Boxplot of Blood Count Tests",
        x = "Test",
        y = "Values")
-
 ```
 
-7. 
+7. Group the ages into 20s, 30s, 40s, 50s, and 60s (60s and 70s should be in one group) and make a new column for those values. Make this a new dataframe called "grouped_bc".
 ```{r}
 grouped_bc <- blood_count %>%
-  change(Age_Group = case_when(
-    Age >= 20 & Age <= 29 ~ "20s",
-    Age >= 30 & Age <= 39 ~ "30s",
-    Age >= 40 & Age <= 49 ~ "40s",
-    Age >= 50 & Age <= 59 ~ "50s",
-    Age >= 60 & Age <= 70 ~ "60s")) # there were only 4 people in 70s, so I combined it with 60s
+  mutate(age_group = case_when(
+    age >= 20 & age <= 29 ~ "20s",
+    age >= 30 & age <= 39 ~ "30s",
+    age >= 40 & age <= 49 ~ "40s",
+    age >= 50 & age <= 59 ~ "50s",
+    age >= 60 & age <= 70 ~ "60s",
+  ))
 
 head(grouped_bc)
-
 ```
 
-8. 
+8. Make a boxplot from the new dataframe, 'grouped_bc', to show the blood count tests by age group.
 ```{r}
-blood_count %>%
-  pivot_longer(cols = 3:9, names_to = "Test", values_to = "Values") %>%
-  ggplot(ase(x = Age_Group, y = values, fill = Age_Group)) +
+grouped_bc %>%
+  pivot_longer(cols = (3:9), names_to= "test", values_to = "values") %>%
+  ggplot(aes(x = age_group, y = values, fill = age_group)) +
   geom_boxplot() +
-  facet_wrap( Test, scales = "free") +  # Facet by the "Test" variable
+  facet_wrap(~test, scales = "free") +  # Facet by the "Test" variable
   labs(title = "Boxplot of Blood Count Tests by Age Group",
        x = "Age Group",
        y = "Values")
-
 ```
+
 9. What are two drawbacks and two benefits of AI?
+Drawbacks: 
+1) It can lead you to rely on it and now on your skills, leaving you to not know how to funtion without it
+2) It can be wrong and lead you to make mistakes
+Benefits:
+1) It can help you learn and understand things you may not have been able to before and help widen your skill set
+2) Its great for troubleshooting 
 
 10. Do you think you will use AI for coding in the future? Why or why not?
+I'm conflicted about it. I want to use it but it is so far confusing me a bit more than helping me. I think once I get the hang of it, it will be a great tool to use only when needed, otherwise I will stick to my own coding. 
 
 
 ## Push your final code to GitHub!
