@@ -63,7 +63,7 @@ sharks %>%
        x="County",
        y="Number of Incidents")+
   theme(plot.title=element_text(size=rel(1.75), hjust = 0.5))+
-  theme(axis.text.x = element_text(angle = 70, hjust=1))
+  theme(axis.text.x = element_text(angle = 70, hjust=1)) +
   theme_light()
 ```
 
@@ -79,7 +79,7 @@ sharks %>%
        x="Month",
        y="Number of Incidents")+
   theme(plot.title=element_text(size=rel(1.75), hjust = 0.5))+
-  theme(axis.text.x = element_text(angle = 70, hjust=1))
+  theme(axis.text.x = element_text(angle = 70, hjust=1)) +
   theme_light()
 
 ```
@@ -108,7 +108,7 @@ sharks %>%
        x="Mode",
        y="Number of Incidents")+
   theme(plot.title=element_text(size=rel(1.75), hjust = 0.5))+
-  theme(axis.text.x = element_text(angle = 70, hjust=1))
+  theme(axis.text.x = element_text(angle = 70, hjust=1)) +
   theme_light()
 ```
 
@@ -124,7 +124,7 @@ sharks %>%
        y="Number of Incidents")+
   facet_wrap(~mode)+
   theme(plot.title=element_text(size=rel(1.25), hjust = 0.5))+
-  theme(axis.text.x = element_text(angle = 70, hjust=1))
+  theme(axis.text.x = element_text(angle = 70, hjust=1)) +
   theme_light()
 ```
 
@@ -140,7 +140,7 @@ sharks %>%
        x="Shark Species",
        y="Number of Incidents")+
   theme(plot.title=element_text(size=rel(1.75), hjust = 0.5))+
-  theme(axis.text.x = element_text(angle = 70, hjust=1))
+  theme(axis.text.x = element_text(angle = 70, hjust=1)) +
   theme_light()
 ```
 
@@ -155,7 +155,7 @@ sharks %>%
        x="Injuty Type",
        y="Number of Incidents")+
   theme(plot.title=element_text(size=rel(1.75), hjust = 0.5))+
-  theme(axis.text.x = element_text(angle = 70, hjust=1))
+  theme(axis.text.x = element_text(angle = 70, hjust=1)) +
   theme_light()
 ```
 
@@ -216,7 +216,7 @@ sharks %>%
        x="County",
        y="Number of Incidents")+
   theme(plot.title=element_text(size=rel(1.5), hjust = 0.5))+
-  theme(axis.text.x = element_text(angle = 70, hjust=1))
+  theme(axis.text.x = element_text(angle = 70, hjust=1)) +
   theme_light()
 ```
 
